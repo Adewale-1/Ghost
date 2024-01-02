@@ -1,0 +1,135 @@
+Tell me a little about yourself
+
+    I would describe myself as an industrious worker and someone who has
+    the skills to match the job description. 
+
+    Over the past year, I have worked in various roles where the need to collaborate closely
+    with other people was a norm. I am willing to learn and add value in any way I can.
+
+    I beleive I am an high achiever,ad I have always recieved positive feedback from my team
+    members and work colleagues, I am a person that goes above and beyound what is expected 
+    in my work and I will embrace change positively.
+
+
+Why do you want to work for us
+    I want to work for JP Morgan for 3 reasons,
+    Firtly, according to JP morgan about section 
+    it states that "they aim to be the most respected financial service in the world, serving 
+    corporations and individuals in more than 100 countries." The word individuals stands out,
+    which fuels my interest to add value to a company where direct impact are made.
+
+    Secondly, Participating in JP Morgans Career.edYou Academy was an eye opener, I was
+    exposed to how diverse the work culture is and also by having a program such as the
+    Advancing Black Pathways.As a person of color, I shows how JP Morgan values diversity
+    and Inclusion
+
+    Finally, It is important for me to continually grow and develop personally and professionally
+    and this is the place I will be surrounded by like minded minds.
+
+
+Tell me about your strengths and weaknesses
+    Strengths
+        My greatest strengths include the ability to be able to quickly fit into any team, I am
+        more flexible which mean I can adapts to any environment and I can diverse my area of 
+        expartise quickly. I will always take ownership of difficult challenges to achieve a
+        successful outcome instead of leaving it for someone else to do.
+
+        Time management
+        Flexibility
+        supportive collaborator
+    Weakness
+        I find it difficult to give a honest feedback to a person, this is because I can not be 
+        objective enough and work only with the information I have rather than adding sentiments.
+
+        Not good at public speaking
+        I do not enjoy giving people honest feedback objectively
+        Find it difficult to let go of project
+
+
+
+
+What's your biggest achievement?
+
+
+
+
+
+
+
+Where do you see yourself in a few years
+
+
+What are your passions?
+
+
+Why are you a good fit for this position?
+
+
+
+
+
+
+
+
+
+Describe what a class is
+
+In object-oriented programming (OOP), a class is a blueprint or template used to create objects.
+It defines the properties (attributes) that an object will have and the behaviors (methods) that
+the object can perform.
+
+What is thread safety (in Java)?
+
+Thread safety in Java refers to the ability of code to run correctly and produce consistent results
+in a multithreaded environment. This means that multiple threads can access and manipulate shared
+data without causing unpredictable behavior or errors.
+
+Why do we need to use inheritance(extends) when we can call a method directly like class.method()
+Code reuseablity
+Organinzation and Maintainance
+
+
+                                  ┌──────────────────────────────┐
+                                  │         Mobile User          │
+                                  └─────────────────┬────────────┘
+                                                    │ Interacts
+  ┌─────────────────────────────────────────────────┼──────────────────────────────────────────────┐
+  │                                                 ▼                                              │ 
+  │                                           ┌──────────────┐                                     │
+  │                Mobile Application         │ Mobile App   │    User Interface                   │
+  │  (User uploads PDF, receives notifications│ (Frontend)   ├────────────────────────┐            │ 
+  │   answers questions, views results)       └──────────────┘                        │            │ 
+  │                                                                                  API Calls     │ 
+  │                                                 │                                     │        │ 
+  │                                        ┌────────▼───────────┐                         │        │
+  │                                        │   API Gateway      │                         │        │ 
+  │                                        │ (Routing & Auth)   │◄────────────────────────┘        │
+  │                                        └────────┬───────────┘                                  │ 
+  │                                                 │ API Requests                                 │ 
+  │                      ┌──────────────────────────┼──────────────────────┐                       │ 
+  │                      │                          │                      │                       │ 
+  │             ┌────────▼────┐            ┌────────▼────┐         ┌───────▼───────────┐           │
+  │             │ Document    │            │ Question    │         │ Push Notification │           │
+  │             │ Processing  │            │ Generation  │         │  Service          │           │
+  │             │  Service    ├─┐          │  Service    ├─┐       └───────┬───────────┘           │
+  │             └────────────┘ │           └─────────────┘ │               │                       │
+  │                      │     └───┐                │      └───┐    Sends notification             │ 
+  │           PDF Parsing &    ┌─────┼───┐   Questions &    ┌─────┼──┐                             │ 
+  │           Text Extraction  │Cache for│    Answers       │Cache for│                            │ 
+  │                            │Questions│   Generation     │Answers  │                            │ 
+  │                            └─────┬───┘                  └─────┬───┘                            │ 
+  │                      ┌───────────┼────────┐   ┌────────────┼────────────┐                      │ 
+  │                      │           │        │   │            │            │                      │ 
+  │             ┌────────▼────┐ ┌────▼────────┤   | ┌──────────▼─────────┐  │                      │
+  │             │Test Bank DB ├─┤Scheduling & │   │ │User Engagement &   │  │                      │ 
+  │             │(Unanswered) │ │Reshuffling  │   │ │ Performance Tracking│  │                     │ 
+  │             │             │ │Service      │   │ │     Service         │  │                     │
+  │             └─────────────┘ └─────────────┘   │ └─────────────────────┘  │                     │ 
+  │                                 │             └────────────┬──────────────┘                    │
+  │                                 │                          │                                   │
+  │                                 ├─────────────► ┌──────────▼────────┐                          │
+  │                                 │  Selects for  │   Test Bank DB    │                          │ 
+  │                                 │  next session │  (Answered)       │                          │ 
+  │                                 └─────────────► └───────────────────┘                          │ 
+  │                                                                                                │ 
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘

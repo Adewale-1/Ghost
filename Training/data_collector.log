@@ -1,0 +1,136 @@
+2023-12-16 23:42:19,190:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-16-1H.csv
+2023-12-16 23:58:12,446:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-16-1H.csv
+2023-12-17 00:01:02,800:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:04:02,630:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:04:30,314:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:05:29,905:ERROR:
+1 Failed download:
+2023-12-17 00:05:29,905:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1609459200 and endTime=1702771200. The requested range must be within the last 730 days.')
+2023-12-17 00:05:29,906:ERROR:No data found for BTC-USD at 2023-12-17 00:05:29.906034 using interval 1H.
+2023-12-17 00:05:29,906:ERROR:All 3 download attempts failed.
+2023-12-17 00:06:18,677:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:07:25,213:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:42:45,117:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:44:27,985:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 00:46:01,941:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-17-1H.csv
+2023-12-17 01:06:08,961:INFO:Data saved to CurrencyData/BTC-USD-2023-11-10-2023-12-17-1H.csv
+2023-12-17 01:06:51,403:INFO:Data saved to CurrencyData/BTC-USD-2023-11-10-2023-12-17-1H.csv
+2023-12-17 01:07:32,546:INFO:Data saved to CurrencyData/BTC-USD-2023-12-03-2023-12-17-1H.csv
+2023-12-17 01:08:30,826:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-17-1H.csv
+2023-12-18 01:06:47,604:ERROR:
+1 Failed download:
+2023-12-18 01:06:47,605:ERROR:['BTC-USD']: Exception('%ticker%: No price data found, symbol may be delisted (1h 2023-10-05 -> 2023-12-18)')
+2023-12-18 01:06:47,605:ERROR:No data found for BTC-USD at 2023-12-18 01:06:47.605876 using interval 1H.
+2023-12-18 01:06:47,606:ERROR:All 3 download attempts failed.
+2023-12-18 01:07:11,230:INFO:Data saved to CurrencyData/BTC-USD-2023-10-05-2023-12-18-1H.csv
+2023-12-19 03:55:03,766:INFO:Data saved to CurrencyData/BTC-USD-2023-11-10-2023-12-19-1H.csv
+2023-12-19 03:56:39,508:INFO:Data saved to CurrencyData/BTC-USD-2023-12-03-2023-12-19-1H.csv
+2023-12-19 05:07:20,255:INFO:Data saved to CurrencyData/BTC-USD-2023-12-03-2023-12-19-1H.csv
+2023-12-19 05:08:37,942:INFO:Data saved to CurrencyData/BTC-USD-2023-12-03-2023-12-19-1H.csv
+2023-12-19 05:14:36,536:ERROR:
+1 Failed download:
+2023-12-19 05:14:36,537:ERROR:['EURUSD=X']: Exception('%ticker%: Invalid input - interval=4h is not supported. Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]')
+2023-12-19 05:14:36,537:ERROR:No data found for EURUSD=X at 2023-12-19 05:14:36.537825 using interval 4H.
+2023-12-19 05:14:36,537:ERROR:All 3 download attempts failed.
+2023-12-19 05:15:22,809:INFO:Data saved to CurrencyData/EURUSD=X-2023-10-03-2023-12-19-1D.csv
+2023-12-19 05:16:49,409:INFO:Data saved to CurrencyData/ETH-USD-2023-12-16-2023-12-19-1H.csv
+2023-12-19 05:18:24,067:INFO:Data saved to CurrencyData/BTC-USD-2023-12-15-2023-12-19-1H.csv
+2023-12-19 05:27:05,569:INFO:Data saved to CurrencyData/BTC-USD-2023-12-15-2023-12-19-1H.csv
+2023-12-19 06:52:43,315:INFO:Data saved to CurrencyData/BTC-USD-2023-12-05-2023-12-19-1H.csv
+2023-12-19 18:15:06,714:INFO:Data saved to CurrencyData/BTC-USD-2023-12-05-2023-12-19-1H.csv
+2023-12-19 18:15:42,067:INFO:Data saved to CurrencyData/BTC-USD-2023-12-06-2023-12-19-1H.csv
+2023-12-19 18:16:42,057:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-19-1H.csv
+2023-12-19 20:03:26,158:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-19-1H.csv
+2023-12-20 19:00:36,488:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-20-1H.csv
+2023-12-21 21:34:39,013:INFO:Data saved to CurrencyData/BTC-USD-2023-10-01-2023-12-21-1H.csv
+2023-12-21 21:36:48,975:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-21-1H.csv
+2023-12-23 00:27:10,449:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-23-1H.csv
+2023-12-24 03:40:48,176:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-24-1H.csv
+2023-12-24 04:52:42,321:ERROR:
+1 Failed download:
+2023-12-24 04:52:42,323:ERROR:['BTC-USD']: Exception('%ticker%: Invalid input - interval=4h is not supported. Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]')
+2023-12-24 04:52:42,323:ERROR:No data found for BTC-USD at 2023-12-24 04:52:42.323410 using interval 4H.
+2023-12-24 04:52:42,323:ERROR:All 3 download attempts failed.
+2023-12-24 04:54:02,725:ERROR:
+1 Failed download:
+2023-12-24 04:54:02,725:ERROR:['BTC-USD']: Exception('%ticker%: Invalid input - interval=4h is not supported. Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]')
+2023-12-24 04:54:02,725:ERROR:No data found for BTC-USD at 2023-12-24 04:54:02.725870 using interval 4H.
+2023-12-24 04:54:02,726:ERROR:All 3 download attempts failed.
+2023-12-24 04:54:37,581:ERROR:
+1 Failed download:
+2023-12-24 04:54:37,581:ERROR:['BTC-USD']: Exception('%ticker%: Invalid input - interval=4h is not supported. Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]')
+2023-12-24 04:54:37,581:ERROR:No data found for BTC-USD at 2023-12-24 04:54:37.581584 using interval 4H.
+2023-12-24 04:54:37,581:ERROR:All 3 download attempts failed.
+2023-12-24 04:55:57,221:ERROR:
+1 Failed download:
+2023-12-24 04:55:57,221:ERROR:['BTC-USD']: Exception('%ticker%: Invalid input - interval=4h is not supported. Valid intervals: [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]')
+2023-12-24 04:55:57,222:ERROR:No data found for BTC-USD at 2023-12-24 04:55:57.221964 using interval 4H.
+2023-12-24 04:55:57,222:ERROR:All 3 download attempts failed.
+2023-12-24 05:12:27,412:ERROR:
+1 Failed download:
+2023-12-24 05:12:27,413:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1410912000 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:12:27,413:ERROR:No data found for BTC-USD at 2023-12-24 05:12:27.413210 using interval 1H.
+2023-12-24 05:12:27,413:ERROR:All 3 download attempts failed.
+2023-12-24 05:15:06,751:ERROR:
+1 Failed download:
+2023-12-24 05:15:06,751:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1420070400 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:15:06,752:ERROR:No data found for BTC-USD at 2023-12-24 05:15:06.752107 using interval 1H.
+2023-12-24 05:15:06,752:ERROR:All 3 download attempts failed.
+2023-12-24 05:15:42,999:ERROR:
+1 Failed download:
+2023-12-24 05:15:42,999:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1451606400 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:15:43,000:ERROR:No data found for BTC-USD at 2023-12-24 05:15:42.999981 using interval 1H.
+2023-12-24 05:15:43,000:ERROR:All 3 download attempts failed.
+2023-12-24 05:16:11,820:ERROR:
+1 Failed download:
+2023-12-24 05:16:11,820:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1483228800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:16:11,821:ERROR:No data found for BTC-USD at 2023-12-24 05:16:11.821032 using interval 1H.
+2023-12-24 05:16:11,821:ERROR:All 3 download attempts failed.
+2023-12-24 05:16:50,420:ERROR:
+1 Failed download:
+2023-12-24 05:16:50,420:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1514764800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:16:50,421:ERROR:No data found for BTC-USD at 2023-12-24 05:16:50.421145 using interval 1H.
+2023-12-24 05:16:50,421:ERROR:All 3 download attempts failed.
+2023-12-24 05:17:41,324:ERROR:
+1 Failed download:
+2023-12-24 05:17:41,325:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1546300800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:17:41,325:ERROR:No data found for BTC-USD at 2023-12-24 05:17:41.325423 using interval 1H.
+2023-12-24 05:17:41,325:ERROR:All 3 download attempts failed.
+2023-12-24 05:18:40,177:ERROR:
+1 Failed download:
+2023-12-24 05:18:40,177:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1577836800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:18:40,178:ERROR:No data found for BTC-USD at 2023-12-24 05:18:40.178064 using interval 1H.
+2023-12-24 05:18:40,178:ERROR:All 3 download attempts failed.
+2023-12-24 05:19:06,235:ERROR:
+1 Failed download:
+2023-12-24 05:19:06,236:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1609459200 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:19:06,236:ERROR:No data found for BTC-USD at 2023-12-24 05:19:06.236615 using interval 1H.
+2023-12-24 05:19:06,237:ERROR:All 3 download attempts failed.
+2023-12-24 05:19:30,265:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-24-1H.csv
+2023-12-24 05:20:24,751:ERROR:
+1 Failed download:
+2023-12-24 05:20:24,751:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1633046400 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:20:24,751:ERROR:No data found for BTC-USD at 2023-12-24 05:20:24.751950 using interval 1H.
+2023-12-24 05:20:24,752:ERROR:All 3 download attempts failed.
+2023-12-24 05:20:44,080:ERROR:
+1 Failed download:
+2023-12-24 05:20:44,080:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1635724800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:20:44,081:ERROR:No data found for BTC-USD at 2023-12-24 05:20:44.081042 using interval 1H.
+2023-12-24 05:20:44,081:ERROR:All 3 download attempts failed.
+2023-12-24 05:21:06,068:ERROR:
+1 Failed download:
+2023-12-24 05:21:06,069:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1638316800 and endTime=1703376000. The requested range must be within the last 730 days.')
+2023-12-24 05:21:06,069:ERROR:No data found for BTC-USD at 2023-12-24 05:21:06.069541 using interval 1H.
+2023-12-24 05:21:06,069:ERROR:All 3 download attempts failed.
+2023-12-24 05:21:35,119:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-24-1H.csv
+2023-12-24 06:37:14,404:INFO:Data saved to CurrencyData/EURUSD=X-2022-01-01-2023-12-24-1H.csv
+2023-12-24 07:00:21,191:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-24-1H.csv
+2023-12-24 13:06:31,603:INFO:Data saved to CurrencyData/BTC-USD-2023-12-12-2023-12-24-1H.csv
+2023-12-24 13:07:50,361:INFO:Data saved to CurrencyData/BTC-USD-2023-12-21-2023-12-24-1H.csv
+2023-12-28 04:15:03,212:INFO:Data saved to CurrencyData/BTC-USD-2022-01-01-2023-12-28-1H.csv
+2023-12-31 23:25:52,771:ERROR:
+1 Failed download:
+2023-12-31 23:25:52,772:ERROR:['BTC-USD']: Exception('%ticker%: 1h data not available for startTime=1640995200 and endTime=1703980800. The requested range must be within the last 730 days.')
+2023-12-31 23:25:52,772:ERROR:No data found for BTC-USD at 2023-12-31 23:25:52.772535 using interval 1H.
+2023-12-31 23:25:52,772:ERROR:All 3 download attempts failed.
+2023-12-31 23:27:15,404:INFO:Data saved to CurrencyData/BTC-USD-2022-02-01-2023-12-31-1H.csv
