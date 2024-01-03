@@ -11,7 +11,7 @@ import mplfinance as mpf
 from harmonic_pattern import *
 
 # Load Pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
 
 
 data["Datetime"] = pd.to_datetime(data["Datetime"])

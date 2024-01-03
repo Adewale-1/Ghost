@@ -7,7 +7,7 @@ import random
 from harmonic_pattern import *
 
 # Load pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
 price = data["Close"]
 
 ERROR_ALLOWED = 10.0 / 100
@@ -55,7 +55,9 @@ class TradingStrategy:
 
         # Initialize the stop-loss based on the position's sign
         initial_stop_loss = (
-            self.entry_price - stop_amount if sign == 1 else self.entry_price + stop_amount
+            self.entry_price - stop_amount
+            if sign == 1
+            else self.entry_price + stop_amount
         )
         stop_loss = initial_stop_loss
 

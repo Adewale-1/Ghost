@@ -1,14 +1,4 @@
-"""
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import pandas as pd
 
-from backtest import entry, tp, sl, good_trade, bad_trade, data
-from scipy.signal import argrelextrema
-
-
-from harmonic_pattern import *
-"""
 
 import pandas as pd
 import numpy as np

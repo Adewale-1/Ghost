@@ -1,8 +1,8 @@
 pandas
-websocket
-websocket-client
+numpy
 yfinance
-logging
-scipy
+logging4
 matplotlib
+mplfinance
+SciPy
 mplfinance
