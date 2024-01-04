@@ -1,5 +1,3 @@
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,10 +9,14 @@ from harmonic_pattern import (
     is_bat_pattern,
     is_crab_pattern,
 )
-from backtest import entry, tp, sl, good_trade, bad_trade, data
+
+# from backtest import entry, tp, sl, good_trade, bad_trade, data
+
+from testSlippage import entry, tp, sl, good_trade, bad_trade, data
+
 
 # Load Pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+
 data["Datetime"] = pd.to_datetime(data["Datetime"])
 data.set_index("Datetime", inplace=True)
 price = data["Close"]

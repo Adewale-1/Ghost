@@ -134,3 +134,4 @@
 2023-12-31 23:25:52,772:ERROR:No data found for BTC-USD at 2023-12-31 23:25:52.772535 using interval 1H.
 2023-12-31 23:25:52,772:ERROR:All 3 download attempts failed.
 2023-12-31 23:27:15,404:INFO:Data saved to CurrencyData/BTC-USD-2022-02-01-2023-12-31-1H.csv
+2024-01-03 17:06:59,096:INFO:Data saved to CurrencyData/ETH-USD-2022-02-01-2024-01-03-1H.csv

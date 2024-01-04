@@ -51,4 +51,4 @@ if __name__ == "__main__":
     # Assuming you have already downloaded the data and have it in a DataFrame `data`
     # Apply the preprocessing function to the data
     preprocessed_data = preprocess_data(data)
-    preprocess_data(data).to_csv("CurrencyData/preprocessed_data2.csv")
+    preprocess_data(data).to_csv("CurrencyData/preprocessed_data5.csv")

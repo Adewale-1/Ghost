@@ -7,11 +7,11 @@ import random
 from harmonic_pattern import *
 
 # Load pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data2.csv")
 price = data["Close"]
 
 ERROR_ALLOWED = 10.0 / 100
-order = 4
+order = 1
 
 """
 For order 1 ;
@@ -23,9 +23,25 @@ For order 3 ;
 For order 4 ;
     Profitable paercentage:  43.95%
 For order 5 ;
-    Profitable paercentage: 35.0%
+    Profitable paercentage: 38.6%
 For order 7 ;
     Profitable paercentage: 38.0%
+
+"""
+"""
+For ETHUSDT
+For order 1 ;
+    Profitable paercentage: 40.35%
+For order 2 ;
+    Profitable paercentage: 42.0%
+For order 3 ;
+    Profitable paercentage: 43.5%
+For order 4 ;
+    Profitable paercentage:  40.00%
+For order 5 ;
+    Profitable paercentage: 35.0%
+For order 7 ;
+    Profitable paercentage: 40.7%
 
 """
 
@@ -43,6 +59,7 @@ class TradingStrategy:
         self.stop_losses = []
         self.profitable_trades = []
         self.non_profitable_trades = []
+        self.array = []
 
     def walk_forward_on_data(
         self, prices_df, sign, slippage_percent=0.02, stop_loss_percent=0.01
@@ -119,11 +136,12 @@ class TradingStrategy:
             tp_price = self.entry_price * (1 + tp_adjustment)
             sl_price = self.entry_price * (1 + sl_adjustment)
 
+
             self.take_profits.append((i, tp_price))
             self.stop_losses.append((i, sl_price))
 
             print(
-                f"New trade at index {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, TP: {tp_price}, SL: {sl_price}"
+                f"New trade at index {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, TP: {tp_price}, SL: {sl_price},, Slippage: {(1 + sl_adjustment)}"
             )
 
     def manage_open_trade(self, latest_close, i):

@@ -12,7 +12,7 @@ load_dotenv(dotenv_path=dotenv_path)
 
 
 def download():
-    TRADE_SYMBOL = "BTCUSDT"
+    TRADE_SYMBOL = "ETHUSDT"
 
     # Binance API Client
     client = Client(os.getenv("API_KEY"), os.getenv("API_SECRET"))
@@ -35,7 +35,7 @@ def download():
     )
     historical_df = pd.DataFrame(historical)
     historical_df.columns = [
-        "Open Time",
+        "Datetime",
         "Open",
         "High",
         "Low",
@@ -50,8 +50,8 @@ def download():
     ]
 
     # Convert timestamps to datetime
-    historical_df["Open Time"] = pd.to_datetime(
-        historical_df["Open Time"] / 1000, unit="s"
+    historical_df["Datetime"] = pd.to_datetime(
+        historical_df["Datetime"] / 1000, unit="s"
     )
     historical_df["Close Time"] = pd.to_datetime(
         historical_df["Close Time"] / 1000, unit="s"
@@ -118,4 +118,4 @@ def preprocess_data(df):
 if __name__ == "__main__":
     data = download()
     preprocessed_data = preprocess_data(data)
-    preprocess_data(data).to_csv("CurrencyData/preprocessed_data3.csv", index=False)
+    preprocess_data(data).to_csv("CurrencyData/preprocessed_data4.csv", index=False)
