@@ -231,7 +231,7 @@ class TradingStrategy:
 strategy = TradingStrategy(
     initial_capital=100,
     leverage=10,
-    account_risk_pct=0.4,
+    account_risk_pct=0.5,
     take_profit_percent=0.03,
     stop_loss_percent=0.03,
     slippage_points=2,
