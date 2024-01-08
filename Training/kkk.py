@@ -6,16 +6,17 @@ from harmonic_pattern import *
 from testSlippage import TradingStrategy  # This should be your TradingStrategy class
 
 # Load pre-processed data (ensure the CSV path is correct)
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
 price = data["Close"]
 ERROR_ALLOWED = 10.0 / 100
+order = 1
 
 # Define parameter ranges
-leverage_values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-account_risk_pct_values = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
-take_profit_percent_values = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
-stop_loss_percent_values = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
-order = 1
+leverage_values = [10, 20, 30, 40]
+account_risk_pct_values = [0.05, 0.1, 0.15, 0.2]
+take_profit_percent_values = [0.01, 0.02, 0.03, 0.04]
+stop_loss_percent_values = [0.01, 0.02, 0.03, 0.04]
+
 # Create a Cartesian product of all parameter combinations
 parameter_combinations = list(
     itertools.product(
@@ -48,6 +49,7 @@ for combination in parameter_combinations:
     original_print = print
     print = lambda *args, **kwargs: None
 
+    # Main backtesting loop
     for i in range(order, len(data) - 1):
         current_price = data["Close"].iloc[i]
 

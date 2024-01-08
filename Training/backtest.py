@@ -7,7 +7,7 @@ import random
 from harmonic_pattern import *
 
 # Load pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data2.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data.csv")
 price = data["Close"]
 
 ERROR_ALLOWED = 10.0 / 100
@@ -135,7 +135,6 @@ class TradingStrategy:
             sl_adjustment = -risk_percent if trade_signal == 1 else risk_percent
             tp_price = self.entry_price * (1 + tp_adjustment)
             sl_price = self.entry_price * (1 + sl_adjustment)
-
 
             self.take_profits.append((i, tp_price))
             self.stop_losses.append((i, sl_price))

@@ -7,7 +7,7 @@ import random
 from harmonic_pattern import *
 
 # Load pre-processed data
-data = pd.read_csv("CurrencyData/preprocessed_data5.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
 price = data["Close"]
 
 ERROR_ALLOWED = 10.0 / 100
@@ -53,6 +53,7 @@ class TradingStrategy:
         self.entry_points = []
         self.take_profits = []
         self.stop_losses = []
+        self.liqudation_prices = []
         self.profitable_trades = []
         self.non_profitable_trades = []
 
@@ -99,6 +100,25 @@ class TradingStrategy:
 
         return None
 
+    def EstimatedLiquidationPrice(
+        self, trade_signal, entry_price, leverage_value, Maintenance_Margin
+    ):
+        liquidation_price = 0
+        Initial_Margin_Rate = 1 / leverage_value
+        Maintenance_Margin_Rate = Maintenance_Margin / 100
+        if trade_signal == 1:  # If it is a long position
+            liquidation_price = entry_price * (
+                1 - Initial_Margin_Rate + Maintenance_Margin_Rate
+            )
+            print(f"Leverage : {leverage_value}")
+            print(f"Values : {Initial_Margin_Rate, Maintenance_Margin_Rate}")
+            print(f"Entry Price : {entry_price}")
+        elif trade_signal == -1:  # If it is a short position
+            liquidation_price = entry_price * (
+                1 + Initial_Margin_Rate - Maintenance_Margin_Rate
+            )
+        return liquidation_price
+
     def execute_trade(
         self,
         trade_signal,
@@ -129,7 +149,9 @@ class TradingStrategy:
                 else 1 - slippage_adjustment
             )
             self.entry_points.append((i, self.entry_price))
-
+            liquidation_price = self.EstimatedLiquidationPrice(
+                trade_signal, self.entry_price, self.leverage, 0.5
+            )
             # Calculate the position size based on leverage, not the total capital
             self.position_size = trade_risk * self.leverage
 
@@ -138,45 +160,52 @@ class TradingStrategy:
             sl_adjustment = -sl_percent if trade_signal == 1 else sl_percent
             tp_price = self.entry_price * (1 + tp_adjustment)
             sl_price = self.entry_price * (1 + sl_adjustment)
+
             # sl_price = self.entry_price
             self.take_profits.append((i, tp_price))
             self.stop_losses.append((i, sl_price))
+            self.liqudation_prices.append((i, liquidation_price))
 
             print(
-                f"Trade {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, Trade Risk: {trade_risk} Position Size: {self.position_size} Current Capital: {self.capital}, TP: {tp_price}, SL: {sl_price}, RR: {tp_percent}/ {sl_percent}"
+                f"Trade {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, Trade Risk: {trade_risk} Position Size: {self.position_size} Current Capital: {self.capital}, TP: {tp_price}, SL: {sl_price}, RR: {tp_percent}/ {sl_percent}, Liquidation Price: {liquidation_price}"
             )
 
     def manage_open_trade(self, latest_price, i):
         if self.position != 0 and self.capital > 0:
             _, tp_price = self.take_profits[-1]
             _, sl_price = self.stop_losses[-1]
+            _, liquidation_price = self.liqudation_prices[-1]
 
             trade_closed = False
             pnl = 0
+            # Check if the latest price hits the liquidation price
+            if (self.position == 1 and latest_price <= liquidation_price) or (
+                self.position == -1 and latest_price >= liquidation_price
+            ):
+                print(f"Liquidation occurred at {latest_price}")
+                # Reset the capital to the amount before the trade and close the position
+
+                self.position = 0
+                self.position_size = 0
+                self.trade_results.append(0)  # PnL is 0 in case of liquidation
+                self.non_profitable_trades.append((i, latest_price))
+                return
 
             # Calculate the PnL based on the risk-to-reward ratio
             if self.position == 1:  # Long position
                 if latest_price >= tp_price:
-                    pnl = (
-                        self.position_size * self.take_profit_percent
-                    )  
+                    pnl = self.position_size * self.take_profit_percent
                     trade_closed = True
                 elif latest_price <= sl_price:
-                    pnl = (
-                        -(self.position_size) * self.stop_loss_percent
-                    )  
+                    pnl = -(self.position_size) * self.stop_loss_percent
                     trade_closed = True
 
             elif self.position == -1:  # Short position
                 if latest_price <= tp_price:
-                    pnl = (
-                        self.position_size * self.take_profit_percent
-                    )  
+                    pnl = self.position_size * self.take_profit_percent
                     trade_closed = True
                 elif latest_price >= sl_price:
-                    pnl = (
-                        -(self.position_size) * self.stop_loss_percent
-                    )  
+                    pnl = -(self.position_size) * self.stop_loss_percent
                     trade_closed = True
 
             if trade_closed:
@@ -202,14 +231,16 @@ class TradingStrategy:
 strategy = TradingStrategy(
     initial_capital=100,
     leverage=10,
-    account_risk_pct=0.1,
+    account_risk_pct=0.4,
     take_profit_percent=0.03,
-    stop_loss_percent=0.01,
+    stop_loss_percent=0.03,
     slippage_points=2,
 )
 """
     Main backtesting loop
 """
+
+
 for i in range(order, len(data) - 1):
     current_price = data["Close"].iloc[i]
 
@@ -269,7 +300,7 @@ print(f"Profitable Trades: {strategy.profitable_trades}\n")
 print(f"Non-Profitable Trades: {strategy.non_profitable_trades}\n")
 print(f"Total Trades: {len(strategy.entry_points)}\n")
 print(">>>>> Test Slippage.py <<<<<")
-print(f"Final Capital: {strategy.capital}\n")
+print(f"Final Capital : ${strategy.capital}\n")
 print(f"Order: {order}")
 print(
     f"Percentage of Profitable Trades: {(100 * len(strategy.profitable_trades))/len(strategy.entry_points)}%"

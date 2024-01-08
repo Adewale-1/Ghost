@@ -25,16 +25,17 @@ class TestWalkForward(unittest.TestCase):
 
     def test_long_position_profit(self):
         self.strategy.execute_trade(trade_signal=1, current_price=100, i=1)
-        print(
-            f"Before Trade Close: Position: {self.strategy.position}, Capital: {self.strategy.capital}"
+        # Updated latest_price to be equal or higher than the expected TP
+        self.strategy.manage_open_trade(latest_price=102.021, i=2)
+        self.assertTrue(
+            self.strategy.position == 0, "Position did not close as expected"
         )
-        self.strategy.manage_open_trade(latest_price=102, i=2)  # Price above TP
-        print(
-            f"After Trade Close: Position: {self.strategy.position}, Capital: {self.strategy.capital}"
+        self.assertTrue(
+            self.strategy.capital > 100, "Capital did not increase as expected"
         )
-        self.assertTrue(self.strategy.position == 0)
-        self.assertTrue(self.strategy.capital > 100)
-        self.assertTrue(len(self.strategy.profitable_trades) > 0)
+        self.assertTrue(
+            len(self.strategy.profitable_trades) > 0, "No profitable trades recorded"
+        )
 
     def test_long_position_loss(self):
         self.strategy.execute_trade(trade_signal=1, current_price=100, i=3)
@@ -45,10 +46,17 @@ class TestWalkForward(unittest.TestCase):
 
     def test_short_position_profit(self):
         self.strategy.execute_trade(trade_signal=-1, current_price=100, i=5)
-        self.strategy.manage_open_trade(latest_price=98, i=6)  # Price below TP
-        self.assertTrue(self.strategy.position == 0)
-        self.assertTrue(self.strategy.capital > 100)
-        self.assertTrue(len(self.strategy.profitable_trades) > 0)
+        # Updated latest_price to be equal or lower than the expected TP
+        self.strategy.manage_open_trade(latest_price=97.98, i=6)
+        self.assertTrue(
+            self.strategy.position == 0, "Position did not close as expected"
+        )
+        self.assertTrue(
+            self.strategy.capital > 100, "Capital did not increase as expected"
+        )
+        self.assertTrue(
+            len(self.strategy.profitable_trades) > 0, "No profitable trades recorded"
+        )
 
     def test_short_position_loss(self):
         self.strategy.execute_trade(trade_signal=-1, current_price=100, i=7)
