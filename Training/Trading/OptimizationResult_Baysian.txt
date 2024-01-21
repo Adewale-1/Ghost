@@ -1,0 +1,3 @@
+Maximum capital return: 3842.2140520065454
+Best parameters for max capital return:
+ {'account_risk_pct': 22.484784139864797, 'leverage': 25, 'order': 4, 'stop_loss_percent': 1.0848045506698618, 'take_profit_percent': 2.5820990678966345}

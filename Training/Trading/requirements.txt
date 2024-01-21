@@ -7,3 +7,7 @@ mplfinance
 SciPy
 mplfinance
 contextlib2
+bayesian-optimization
+deap
+pyswarm
+cma

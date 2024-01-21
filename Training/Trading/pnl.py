@@ -6,7 +6,7 @@ from harmonic_pattern import *
 from testSlippage import TradingStrategy  # This should be your TradingStrategy class
 
 # Load pre-processed data (ensure the CSV path is correct)
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+data = pd.read_csv("CurrencyData/preprocessed_data3.csv")
 price = data["Close"]
 ERROR_ALLOWED = 10.0 / 100
 
@@ -15,7 +15,7 @@ leverage_values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 account_risk_pct_values = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
 take_profit_percent_values = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
 stop_loss_percent_values = [0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.1]
-order = 1
+order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # Create a Cartesian product of all parameter combinations
 parameter_combinations = list(
     itertools.product(
@@ -23,6 +23,7 @@ parameter_combinations = list(
         account_risk_pct_values,
         take_profit_percent_values,
         stop_loss_percent_values,
+        order,
     )
 )
 
@@ -32,7 +33,13 @@ max_return = -np.inf  # Start with a very low return
 
 # Grid search through each combination
 for combination in parameter_combinations:
-    leverage, account_risk_pct, take_profit_percent, stop_loss_percent = combination
+    (
+        leverage,
+        account_risk_pct,
+        take_profit_percent,
+        stop_loss_percent,
+        order,
+    ) = combination
 
     # Initialize strategy with current combination
     strategy = TradingStrategy(
@@ -106,10 +113,20 @@ for combination in parameter_combinations:
         max_return = final_capital
         best_combination = combination
 
+
+# Write the best parameter combination to a text file
+with open("OptimizationResult.txt", "w") as file:
+    file.write(
+        f"Maximum capital return: {max_return}\n"
+        f"Best parameters for max capital return: Leverage: {best_combination[0]},\n "
+        f"Account Risk%: {best_combination[1]},\n Take Profit%: {best_combination[2]},\n "
+        f"Stop Loss%: {best_combination[3]},\n Best order: {best_combination[4]}"
+    )
+
 # Print the best parameter combination (Leverage, Account Risk%, Take Profit%, Stop Loss%)
 print(
     f"Best parameters for max capital return: Leverage: {best_combination[0]}, "
     f"Account Risk%: {best_combination[1]}, Take Profit%: {best_combination[2]}, "
-    f"Stop Loss%: {best_combination[3]}"
+    f"Stop Loss%: {best_combination[3]},Best order: {best_combination[4]}"
 )
 print(f"Max capital return: {max_return}")

@@ -70,12 +70,3 @@ def download_data(currency_pair, start_date, end_date, time_interval, retries=3)
     sys.exit(f"Failed to download data after {retries} attempts. Exiting.")
 
 
-# if __name__ == "__main__":
-#     currency_pair = input("Enter currency pair: ")
-#     start_date = input("Enter start date (YYYY-MM-DD): ")
-#     time_interval = input("Enter time interval: ")
-
-#     # Get the current date as the end date
-#     end_date = datetime.now().strftime("%Y-%m-%d")
-
-#     data = download_data(currency_pair, start_date, end_date, time_interval)

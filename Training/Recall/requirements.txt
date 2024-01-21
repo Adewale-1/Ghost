@@ -1,0 +1,12 @@
+PyPDF2
+langchain
+python-dotenv
+openai
+huggingface_hub
+openai==0.28
+flask
+
+requests
+jsonify
+temp
+dotenv

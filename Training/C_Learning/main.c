@@ -3,11 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+int main(void)
 {
-    const int num = 5;
-    char name[] = "John is a good boy";
-    int age = 35;
-    printf("Hello, %s  and  the number is %d \n", name, age);
+    int age;
+    printf("Input your age:\n");
+    scanf("%d", &age);
     return 0;
 }

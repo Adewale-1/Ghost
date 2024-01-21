@@ -13,6 +13,7 @@ load_dotenv(dotenv_path=dotenv_path)
 
 def download():
     TRADE_SYMBOL = "ETHUSDT"
+    TRADE_SYMBOL = "BTCUSDT"
 
     # Binance API Client
     client = Client(os.getenv("API_KEY"), os.getenv("API_SECRET"))
