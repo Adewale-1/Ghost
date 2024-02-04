@@ -10,3 +10,6 @@ requests
 jsonify
 temp
 dotenv
+fastapi 
+uvicorn
+pydub
