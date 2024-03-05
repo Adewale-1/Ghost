@@ -6,7 +6,7 @@ Tell me a little about yourself
     Over the past year, I have worked in various roles where the need to collaborate closely
     with other people was a norm. I am willing to learn and add value in any way I can.
 
-    I beleive I am an high achiever,ad I have always recieved positive feedback from my team
+    I beleive I am an high achiever,and I have always recieved positive feedback from my team
     members and work colleagues, I am a person that goes above and beyound what is expected 
     in my work and I will embrace change positively.
 
@@ -44,6 +44,51 @@ Tell me about your strengths and weaknesses
         Not good at public speaking
         I do not enjoy giving people honest feedback objectively
         Find it difficult to let go of project
+
+
+
+
+
+
+
+
+
+As a Lead Software Developer in a Start-Up, a recent  challenge  I faced was how to enhance
+student engagement and learning outcomes through an educational application. 
+
+The core issue was making the learning material more interactive.and my solution involved
+leveraging my expertise in Python and object-oriented programming and design to integrate an innovative features such as :
+Flashcard generation from textbooks, adaptive and functional learning.all  This was achieved by employing
+HuggingFace models, OpenAI Embeddings, and Langchain’s Vector stores. 
+ 
+This approach not only improved the functionality and user experience
+of the application but also directly addressed the problem by providing a more engaging and functional
+learning tool. With this approach, I was able to significantly boost student
+engagement and learning outcomes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

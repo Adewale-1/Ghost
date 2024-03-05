@@ -114,8 +114,8 @@ class TradingStrategy:
             liquidation_price = entry_price * (
                 1 - Initial_Margin_Rate + Maintenance_Margin_Rate
             )
-            # print(f"Leverage : {leverage_value}")
-            # print(f"Order : {order}")
+            print(f"Leverage : {leverage_value}")
+            print(f"Order : {order}")
             # print(f"Account Risk : {self.account_risk_pct}")
             # print(f"Take Profit : {self.take_profit_percent}")
             # print(f"Stop Loss : {self.stop_loss_percent}")
