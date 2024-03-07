@@ -29,19 +29,58 @@ def send_telegram_message(message):
     print(f"{message}")
 
 def get_historical_data(symbol, interval):
+    """
+    Fetches historical price data for a specified symbol and interval using the Binance Futures API.
+    
+    Parameters:
+    - symbol (str): The symbol for which to get historical data (e.g., 'BTCUSDT').
+    - interval (str): The interval for the klines/candlesticks data (e.g., '1d' for one day).
+    
+    Returns:
+    - list of float: A list of closing prices for each kline/candlestick.
+    """
     klines = client.futures_klines(symbol=symbol, interval=interval)
+    # this gets the close price for each kline
     close_prices = [float(entry[4]) for entry in klines]
     return close_prices
 
 def get_latest_price(symbol):
+    """
+    Retrieves the latest price for a given symbol using the Binance Futures API.
+    
+    Parameters:
+    - symbol (str): The symbol for which to get the latest price (e.g., 'BTCUSDT').
+    
+    Returns:
+    - float: The latest price of the symbol.
+    """
     ticker = client.futures_ticker(symbol=symbol)
     return float(ticker['lastPrice'])
 
 def adjust_precision(value, precision):
+    """
+    Adjusts the precision of a given numeric value to the specified number of decimal places.
+    
+    Parameters:
+    - value (float): The numeric value to adjust.
+    - precision (int): The number of decimal places to round to.
+    
+    Returns:
+    - str: The value formatted as a string with the specified precision.
+    """
     format_string = "{:0.0" + str(precision) + "f}"
     return format_string.format(value)
 
 def get_balance(asset):
+    """
+    Retrieves the wallet balance for a specific asset using the Binance Futures API.
+    
+    Parameters:
+    - asset (str): The asset for which to get the wallet balance (e.g., 'USDT').
+    
+    Returns:
+    - float: The wallet balance of the specified asset. Returns 0.0 if the asset is not found.
+    """
     account_info = client.futures_account()
     for asset_balance in account_info['assets']:
         if asset_balance['asset'] == asset:
@@ -49,7 +88,16 @@ def get_balance(asset):
     return 0.0
 
 def calculate_quantity(symbol, percentage):
+    """
+    Calculates the quantity to trade for a given symbol based on the percentage of the quote asset balance.
     
+    Parameters:
+    - symbol (str): The trading symbol (e.g., 'BTCUSDT').
+    - percentage (float): The percentage of the quote asset balance to use for the trade.
+    
+    Returns:
+    - str: The calculated quantity to trade, adjusted to the correct precision.
+    """
     # Fetch account information
     account_info = client.futures_account()
     exchange_info = client.get_exchange_info()
@@ -92,6 +140,18 @@ def calculate_quantity(symbol, percentage):
     return qty
 
 def place_order(symbol, side, leverage, percentage):
+    """
+    Places a market order on the Binance Futures market with specified parameters.
+    
+    Parameters:
+    - symbol (str): The symbol to trade (e.g., 'BTCUSDT').
+    - side (str): The side of the order ('BUY' or 'SELL').
+    - leverage (int): The leverage to use for the order.
+    - percentage (float): The percentage of the account's quote asset to use for this order.
+    
+    Returns:
+    - dict: The response from the Binance API with the order details. Returns None if the order placement fails.
+    """
     try:
         # Set leverage
         client.futures_change_leverage(symbol=symbol, leverage=leverage)
@@ -109,6 +169,16 @@ def place_order(symbol, side, leverage, percentage):
         return None
 
 def close_order(symbol, side):
+    """
+    Attempts to close an existing order for a given symbol and side.
+    
+    Parameters:
+    - symbol (str): The symbol for which to close the order (e.g., 'BTCUSDT').
+    - side (dict): The order details, particularly containing the 'clientOrderId'.
+    
+    Returns:
+    - bool: True if successful, False otherwise.
+    """
     """Close existing order based on the side (BUY/SELL)"""
 
     if 'clientOrderId' not in side:
@@ -135,6 +205,20 @@ def close_order(symbol, side):
         send_telegram_message(f"Error closing {side} order: {e.message}")
 
 def main(symbol, short_ema_period, long_ema_period, interval, leverage, percentage):
+    """
+    Main trading logic that uses exponential moving averages (EMA) to make trading decisions.
+    
+    Parameters:
+    - symbol (str): The trading symbol (e.g., 'BTCUSDT').
+    - short_ema_period (int): The period for the short EMA.
+    - long_ema_period (int): The period for the long EMA.
+    - interval (str): The interval for fetching historical data.
+    - leverage (int): The leverage to use for trading.
+   ).
+    
+    Returns:
+    - list: A list of closing prices for each kline/candlestick.
+    """
     last_action = {}
     balance = 0.0
     earning = 0.0
