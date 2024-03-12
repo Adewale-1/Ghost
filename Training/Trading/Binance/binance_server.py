@@ -7,6 +7,7 @@ import numpy as np
 
 
 class ConnectToBinance:
+
     def __init__(self, api_key, api_secret,leverage,accountSize,prediction, testnet):
         self.client = Client(api_key=api_key, api_secret=api_secret, testnet=testnet)
         self.accountBalance
@@ -45,13 +46,13 @@ class ConnectToBinance:
     
     def getAccountBalance(self, asset):
         """
-        Retrieves the wallet balance for a specific asset using the Binance Futures API.
-        
-        Parameters:
-        - asset (str): The asset for which to get the wallet balance (e.g., 'USDT').
-        
-        Returns:
-        - float: The wallet balance of the specified asset. Returns 0.0 if the asset is not found.
+            Retrieves the wallet balance for a specific asset using the Binance Futures API.
+            
+            Parameters:
+            - asset (str): The asset for which to get the wallet balance (e.g., 'USDT').
+            
+            Returns:
+            - float: The wallet balance of the specified asset. Returns 0.0 if the asset is not found.
         """
         account_info = self.client.futures_account()
         for asset_balance in account_info['assets']:

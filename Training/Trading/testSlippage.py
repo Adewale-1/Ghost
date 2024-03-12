@@ -28,7 +28,7 @@ For order 7 ;
 class TradingStrategy:
 
     """
-    Initialize the TradingStrategy object with the following parameters:
+        Initialize the TradingStrategy object with the following parameters:
     """
 
     def __init__(
