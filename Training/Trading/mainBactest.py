@@ -3,7 +3,7 @@ import numpy as np
 from scipy.signal import argrelextrema
 import itertools
 from harmonic_pattern import *
-from testSlippage import TradingStrategy  # This should be your TradingStrategy class
+from semiBacktest import TradingStrategy  # This should be my TradingStrategy class
 
 # Load pre-processed data (ensure the CSV path is correct)
 data = pd.read_csv("CurrencyData/preprocessed_data3.csv")

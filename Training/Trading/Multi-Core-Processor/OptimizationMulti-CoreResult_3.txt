@@ -1,0 +1,7 @@
+From File /Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/ETHUSDT_updated.csv
+Maximum capital return: 4.256146827346219e+21
+Best parameters for max capital return: Leverage: 100,
+Account Risk%: 0.5,
+ Take Profit%: 0.08,
+Stop Loss%: 0.1,
+ Best order: 8

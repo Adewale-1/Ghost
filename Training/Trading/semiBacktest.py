@@ -26,9 +26,8 @@ For order 7 ;
 
 
 class TradingStrategy:
-
     """
-        Initialize the TradingStrategy object with the following parameters:
+    Initialize the TradingStrategy object with the following parameters:
     """
 
     def __init__(
@@ -40,6 +39,7 @@ class TradingStrategy:
         stop_loss_percent,
         slippage_points,
     ):
+        self.initial_capital = initial_capital  # Add this line
         self.capital = initial_capital
         self.leverage = leverage
         self.account_risk_pct = account_risk_pct
@@ -57,100 +57,46 @@ class TradingStrategy:
         self.profitable_trades = []
         self.non_profitable_trades = []
 
-    def walk_forward_on_Data(
-        self, prices_df, sign, slippage_percent=0.02, stop_loss_percent=0.01
-    ):
-        self.entry_price = prices_df["Close"].iloc[0]
-
-        # Calculate slippage and stop-loss amount as percentages of the entry price
-        slippage_amount = self.entry_price * slippage_percent
-        stop_amount = self.entry_price * stop_loss_percent
-
-        # Initialize the stop-loss based on the position's sign
-        initial_stop_loss = (
-            self.entry_price - stop_amount
-            if sign == 1
-            else self.entry_price + stop_amount
-        )
-        stop_loss = initial_stop_loss
-
-        for i in range(1, len(prices_df)):
-            if sign == 1:
-                if prices_df["Close"].iloc[i] > stop_loss + stop_amount:
-                    stop_loss = prices_df["Close"].iloc[i] - stop_amount
-
-                if prices_df["Close"].iloc[i] < stop_loss:
-                    exit_price = (
-                        max(prices_df["Open"].iloc[i], stop_loss) - slippage_amount
-                    )
-                    pnl = exit_price - self.entry_price
-                    return pnl
-
-            # Update stop-loss logic for short position
-            elif sign == -1:
-                if prices_df["Close"].iloc[i] < stop_loss - stop_amount:
-                    stop_loss = prices_df["Close"].iloc[i] + stop_amount
-
-                if prices_df["Close"].iloc[i] > stop_loss:
-                    exit_price = (
-                        min(prices_df["Open"].iloc[i], stop_loss) + slippage_amount
-                    )
-                    pnl = self.entry_price - exit_price
-                    return pnl
-
-        return None
-
     """
         Calculate the estimated liquidation price based on the leverage, entry price and maintenance margin
     """
 
     def EstimatedLiquidationPrice(
-        self, trade_signal, entry_price, leverage_value, Maintenance_Margin
+        self, trade_signal, entry_price, position_size, Maintenance_Margin
     ):
-        liquidation_price = 0
-        Initial_Margin_Rate = 1 / leverage_value
-        Maintenance_Margin_Rate = Maintenance_Margin / 100
-        if trade_signal == 1:  # If it is a long position
-            liquidation_price = entry_price * (
-                1 - Initial_Margin_Rate + Maintenance_Margin_Rate
-            )
-            print(f"Leverage : {leverage_value}")
-            print(f"Order : {order}")
-            # print(f"Account Risk : {self.account_risk_pct}")
-            # print(f"Take Profit : {self.take_profit_percent}")
-            # print(f"Stop Loss : {self.stop_loss_percent}")
+        margin = position_size / self.leverage
+        Maintenance_Margin_Amount = position_size * (Maintenance_Margin / 100)
 
-        elif trade_signal == -1:  # If it is a short position
+        if trade_signal == 1:  # Long position
             liquidation_price = entry_price * (
-                1 + Initial_Margin_Rate - Maintenance_Margin_Rate
+                1 - (margin - Maintenance_Margin_Amount) / position_size
             )
+        elif trade_signal == -1:  # Short position
+            liquidation_price = entry_price * (
+                1 + (margin - Maintenance_Margin_Amount) / position_size
+            )
+
         return liquidation_price
 
     """
         Execute the trade based on the trading signal and the current price
     """
 
-    def execute_trade(
-        self,
-        trade_signal,
-        current_price,
-        i,
-    ):
+    def execute_trade(self, trade_signal, current_price, i):
         tp_percent = self.take_profit_percent
         sl_percent = self.stop_loss_percent
-        # Check if there is sufficient capital to execute the trade
+
         if self.capital <= 1:
             print("Insufficient capital to execute trade.")
             return
 
         if trade_signal != 0 and self.position == 0:
-            # Calculate the amount of capital at risk
             trade_risk = self.capital * self.account_risk_pct
 
-            # Check if the trade risk is greater than the total capital
             if trade_risk > self.capital:
                 print("Insufficient capital to execute trade.")
                 return
+
             self.capital -= trade_risk
             self.position = trade_signal
             slippage_adjustment = self.slippage_points * 0.0001
@@ -160,19 +106,19 @@ class TradingStrategy:
                 else 1 - slippage_adjustment
             )
             self.entry_points.append((i, self.entry_price))
-            liquidation_price = self.EstimatedLiquidationPrice(
-                trade_signal, self.entry_price, self.leverage, 0.5
-            )
-            # Calculate the position size based on leverage, not the total capital
-            self.position_size = trade_risk * self.leverage
 
-            # Calculate take profit and stop loss prices
+            self.position_size = trade_risk * self.leverage
+            self.margin = trade_risk  # Store the margin amount
+
+            liquidation_price = self.EstimatedLiquidationPrice(
+                trade_signal, self.entry_price, self.position_size, 0.5
+            )
+
             tp_adjustment = tp_percent if trade_signal == 1 else -tp_percent
             sl_adjustment = -sl_percent if trade_signal == 1 else sl_percent
             tp_price = self.entry_price * (1 + tp_adjustment)
             sl_price = self.entry_price * (1 + sl_adjustment)
 
-            # sl_price = self.entry_price
             self.take_profits.append((i, tp_price))
             self.stop_losses.append((i, sl_price))
             self.liqudation_prices.append((i, liquidation_price))
@@ -193,42 +139,39 @@ class TradingStrategy:
 
             trade_closed = False
             pnl = 0
+
             # Check if the latest price hits the liquidation price
             if (self.position == 1 and latest_price <= liquidation_price) or (
                 self.position == -1 and latest_price >= liquidation_price
             ):
                 print(f"Liquidation occurred at {latest_price}")
-                # Reset the capital to the amount before the trade and close the position
-
+                # The entire margin is lost in case of liquidation
+                self.capital -= self.margin
                 self.position = 0
                 self.position_size = 0
-                self.trade_results.append(0)  # PnL is 0 in case of liquidation
+                self.margin = 0
+                self.trade_results.append(-self.margin)
                 self.non_profitable_trades.append((i, latest_price))
                 return
 
-            # Calculate the PnL based on the risk-to-reward ratio
+            # Calculate the PnL based on the actual price movement and leverage
+            price_change = (latest_price - self.entry_price) / self.entry_price
             if self.position == 1:  # Long position
-                if latest_price >= tp_price:
-                    pnl = self.position_size * self.take_profit_percent
+                pnl = self.position_size * price_change
+                if latest_price >= tp_price or latest_price <= sl_price:
                     trade_closed = True
-                elif latest_price <= sl_price:
-                    pnl = -(self.position_size) * self.stop_loss_percent
-                    trade_closed = True
-
             elif self.position == -1:  # Short position
-                if latest_price <= tp_price:
-                    pnl = self.position_size * self.take_profit_percent
-                    trade_closed = True
-                elif latest_price >= sl_price:
-                    pnl = -(self.position_size) * self.stop_loss_percent
+                pnl = -self.position_size * price_change
+                if latest_price <= tp_price or latest_price >= sl_price:
                     trade_closed = True
 
             if trade_closed:
-                # Re-add the risked amount and the PnL to the capital
-                self.capital += (self.position_size / self.leverage) + pnl
+                # Re-add the margin and the PnL to the capital
+                self.capital += self.margin + pnl
                 self.trade_results.append(pnl)
                 self.position = 0  # Reset position
                 self.position_size = 0  # Reset position size
+                self.margin = 0  # Reset margin
                 # Record profitable and non-profitable trades
                 if pnl > 0:
                     self.profitable_trades.append((i, latest_price))
@@ -245,6 +188,8 @@ class TradingStrategy:
 
 
 def backtest(strategy, data, order):
+    price = data["Close"]
+
     for i in range(order, len(data) - 1):
         current_price = data["Close"].iloc[i]
 
@@ -277,64 +222,134 @@ def backtest(strategy, data, order):
             )
 
             if np.any(harmonics == 1):
-                strategy.execute_trade(
-                    1,
-                    current_price,
-                    i,
-                )
+                strategy.execute_trade(1, current_price, i)
             elif np.any(harmonics == -1):
-                strategy.execute_trade(
-                    -1,
-                    current_price,
-                    i,
-                )
+                strategy.execute_trade(-1, current_price, i)
 
         # If there is an open position, manage the trade
         elif strategy.position != 0:
-            latest_close = data["Close"].iloc[i]
-            strategy.manage_open_trade(latest_close, i)
+            strategy.manage_open_trade(current_price, i)
+
+        # Check if we should stop backtesting due to insufficient capital
+        if hasattr(strategy, "initial_capital"):
+            if strategy.capital <= strategy.initial_capital * 0.1:
+                print(f"Stopping backtest at index {i} due to insufficient capital.")
+                break
+        else:
+            print("Warning: 'initial_capital' attribute not found in strategy object.")
+
+    # Close any open position at the end of the backtest
+    if strategy.position != 0:
+        final_price = data["Close"].iloc[-1]
+        strategy.manage_open_trade(final_price, len(data) - 1)
+
+    # Calculate and print summary statistics
+    total_trades = len(strategy.entry_points)
+    profitable_trades = len(strategy.profitable_trades)
+    non_profitable_trades = len(strategy.non_profitable_trades)
+
+    print("\n----- Backtest Summary -----")
+    print(f"Total trades: {total_trades}")
+    print(f"Profitable trades: {profitable_trades}")
+    print(f"Non-profitable trades: {non_profitable_trades}")
+
+    if total_trades > 0:
+        win_rate = (profitable_trades / total_trades) * 100
+        print(f"Win rate: {win_rate:.2f}%")
+
+    print(f"Final capital: ${strategy.capital:.2f}")
+    if hasattr(strategy, "initial_capital"):
+        total_return = (
+            (strategy.capital - strategy.initial_capital) / strategy.initial_capital
+        ) * 100
+        print(f"Total return: {total_return:.2f}%")
+
+    print("----------------------------\n")
+    entry_data = strategy.entry_points
+    tp_data = strategy.take_profits
+    sl_data = strategy.stop_losses
+    good_trade_data = strategy.profitable_trades
+    bad_trade_data = strategy.non_profitable_trades
+
+    return strategy, entry_data, tp_data, sl_data, good_trade_data, bad_trade_data
 
 
-if __name__ == "__main__":
-    data = pd.read_csv("CurrencyData/preprocessed_data.csv")
-    price = data["Close"]
+# if __name__ == "__main__":
+#     data = pd.read_csv(
+#         "/Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/preprocessed_data2.csv"
+#     )
 
-    ERROR_ALLOWED = 10.0 / 100
-    order = 4
+#     ERROR_ALLOWED = 10.0 / 100
+#     order = 1  # As per Bayesian optimization result
 
-    strategy = TradingStrategy(
-        initial_capital=100,
-        leverage=25,
-        account_risk_pct=0.45,
-        take_profit_percent=0.025,
-        stop_loss_percent=0.01,
-        slippage_points=2,
-    )
+#     strategy = TradingStrategy(
+#         initial_capital=100,
+#         leverage=15,
+#         account_risk_pct=0.1333,  # 13.33% as per optimization, but consider reducing this
+#         take_profit_percent=0.0264,  # 2.64% as per optimization
+#         stop_loss_percent=0.0217,  # 2.17% as per optimization
+#         slippage_points=2,
+#     )
+
+#     # Run the backtest
+#     final_strategy, entry_data, tp_data, sl_data, good_trade_data, bad_trade_data = (
+#         backtest(strategy, data, order)
+#     )
+
+#     print(">>>>> Test Results <<<<<")
+#     print(f"Final Capital: ${final_strategy.capital:.2f}")
+#     print(f"Order: {order}")
+#     if len(final_strategy.entry_points) > 0:
+#         print(
+#             f"Percentage of Profitable Trades: {(100 * len(final_strategy.profitable_trades)) / len(final_strategy.entry_points):.2f}%"
+#         )
+#     else:
+#         print("No trades executed")
+#     print(f"Total Trades: {len(final_strategy.entry_points)}")
+#     print(f"Profitable Trades: {len(final_strategy.profitable_trades)}")
+#     print(f"Non-Profitable Trades: {len(final_strategy.non_profitable_trades)}")
+
+
+# data = pd.read_csv(
+#     "/Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/rd2.csv"
+# )
+
+data = pd.read_csv(
+    "/Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/preprocessed_data2.csv"
+)
+
+# ERROR_ALLOWED = 10.0 / 100
+ERROR_ALLOWED = 0.1
+order = 1  # As per Bayesian optimization result
+
+strategy = TradingStrategy(
+    initial_capital=100,
+    leverage=15,
+    account_risk_pct=0.1333,  # 13.33% as per optimization, but consider reducing this
+    take_profit_percent=0.0264,  # 2.64% as per optimization
+    stop_loss_percent=0.0217,  # 2.17% as per optimization
+    slippage_points=2,
+)
+
+# Run the backtest
+final_strategy, entry_data, tp_data, sl_data, good_trade_data, bad_trade_data = (
     backtest(strategy, data, order)
+)
 
-    # print(f"Total PnL from Trades: {sum(strategy.trade_results)}\n")
-    # print(f"Trade Results: {strategy.trade_results}\n")
-    # print(f"Entry Points: {strategy.entry_points}\n")
-    # print(f"Take Profits: {strategy.take_profits}\n")
-    # print(f"Stop Losses: {strategy.stop_losses}\n")
-    # print(f"Profitable Trades: {strategy.profitable_trades}\n")
-    # print(f"Non-Profitable Trades: {strategy.non_profitable_trades}\n")
-    # print(f"Total Trades: {len(strategy.entry_points)}\n")
-    print(">>>>> Test Slippage.py <<<<<")
-    print(f"Final Capital : ${strategy.capital}\n")
-    print(f"Order: {order}")
+print(">>>>> Test Results <<<<<")
+print(f"Final Capital: ${final_strategy.capital:.2f}")
+print(f"Order: {order}")
+if len(final_strategy.entry_points) > 0:
     print(
-        f"Percentage of Profitable Trades: {(100 * len(strategy.profitable_trades))/len(strategy.entry_points)}%"
+        f"Percentage of Profitable Trades: {(100 * len(final_strategy.profitable_trades)) / len(final_strategy.entry_points):.2f}%"
     )
+else:
+    print("No trades executed")
+print(f"Total Trades: {len(final_strategy.entry_points)}")
+print(f"Profitable Trades: {len(final_strategy.profitable_trades)}")
+print(f"Non-Profitable Trades: {len(final_strategy.non_profitable_trades)}")
 
-    """
-        Data for plotting 
-    """
-    entry = strategy.entry_points
-    tp = strategy.take_profits
-    sl = strategy.stop_losses
-    good_trade = strategy.profitable_trades
-    bad_trade = strategy.non_profitable_trades
+
 """
-	This is the end of the scipt...
+	This is the end of the script...
 """

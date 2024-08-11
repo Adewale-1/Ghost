@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.signal import argrelextrema
 from harmonic_pattern import *
-from testSlippage import TradingStrategy  # This should be your TradingStrategy class
+from Trading.mainBackTest import TradingStrategy  # This should be your TradingStrategy class
 from deap import base, creator, tools, algorithms
 import random
 import os

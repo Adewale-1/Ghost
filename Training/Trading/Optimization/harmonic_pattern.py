@@ -23,7 +23,7 @@ def is_gartley_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -33,10 +33,10 @@ def is_gartley_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
 
@@ -62,7 +62,7 @@ def is_butterfly_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -72,9 +72,9 @@ def is_butterfly_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
 
@@ -100,7 +100,7 @@ def is_bat_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -110,9 +110,9 @@ def is_bat_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
 
@@ -138,7 +138,7 @@ def is_crab_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -148,9 +148,9 @@ def is_crab_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
 
@@ -176,7 +176,7 @@ def is_shark_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -186,11 +186,13 @@ def is_shark_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
+
+
 # """
 
 
@@ -215,7 +217,7 @@ def is_cypher_pattern(lines, error_allowed):
         ):
             direction = 1
         else:
-            direction = np.NAN
+            direction = np.nan
 
     elif XA < 0 and AB > 0 and BC < 0 and CD > 0:
         if (
@@ -225,9 +227,9 @@ def is_cypher_pattern(lines, error_allowed):
         ):
             direction = -1
         else:
-            direction = np.NAN
+            direction = np.nan
     else:
-        direction = np.NAN
+        direction = np.nan
 
     return direction
 

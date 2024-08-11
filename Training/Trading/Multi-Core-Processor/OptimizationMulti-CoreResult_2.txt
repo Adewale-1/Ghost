@@ -1,0 +1,7 @@
+From File /Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/BTCUSDT_updated.csv
+Maximum capital return: 1.0075036807113892e+18
+Best parameters for max capital return: Leverage: 100,
+Account Risk%: 0.5,
+ Take Profit%: 0.1,
+Stop Loss%: 0.05,
+ Best order: 7

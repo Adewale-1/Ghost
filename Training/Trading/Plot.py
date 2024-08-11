@@ -12,8 +12,17 @@ from harmonic_pattern import (
 
 # from backtest import entry, tp, sl, good_trade, bad_trade, data
 
-from testSlippage import entry, tp, sl, good_trade, bad_trade, data
+# from backtestStrategy import entry, tp, sl, good_trade, bad_trade, data
+from semiBacktest import entry_data, tp_data, sl_data, good_trade_data, bad_trade_data, data
 
+entry, tp, sl, good_trade, bad_trade, data = (
+    entry_data,
+    tp_data,
+    sl_data,
+    good_trade_data,
+    bad_trade_data,
+    data,
+)
 
 # Load Pre-processed data
 

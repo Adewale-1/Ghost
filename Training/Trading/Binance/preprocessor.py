@@ -1,6 +1,6 @@
 import pandas as pd
 from scipy import stats
-
+import numpy as np
 
 class Preprocessor:
     def __init__(self, data):

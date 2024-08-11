@@ -11,7 +11,7 @@ data = pd.read_csv("CurrencyData/preprocessed_data.csv")
 price = data["Close"]
 
 ERROR_ALLOWED = 10.0 / 100
-order = 1
+order = 8
 
 """
 For order 1 ;
@@ -46,10 +46,255 @@ For order 7 ;
 """
 
 
+# class TradingStrategy:
+#     def __init__(self, initial_capital, position_size, slippage_points):
+#         self.capital = initial_capital
+#         self.position_size = position_size
+#         self.slippage_points = slippage_points
+#         self.position = 0  # 1 for long, -1 for short, 0 for no position
+#         self.entry_price = 0
+#         self.trade_results = []
+#         self.entry_points = []
+#         self.take_profits = []
+#         self.stop_losses = []
+#         self.profitable_trades = []
+#         self.non_profitable_trades = []
+#         self.array = []
+
+#     def walk_forward_on_data(
+#         self, prices_df, sign, slippage_percent=0.02, stop_loss_percent=0.01
+#     ):
+#         self.entry_price = prices_df["Close"].iloc[0]
+
+#         # Calculate slippage and stop-loss amount as percentages of the entry price
+#         slippage_amount = self.entry_price * slippage_percent
+#         stop_amount = self.entry_price * stop_loss_percent
+
+#         # Initialize the stop-loss based on the position's sign
+#         initial_stop_loss = (
+#             self.entry_price - stop_amount
+#             if sign == 1
+#             else self.entry_price + stop_amount
+#         )
+#         stop_loss = initial_stop_loss
+
+#         for i in range(1, len(prices_df)):
+#             if sign == 1:
+#                 if prices_df["Close"].iloc[i] > stop_loss + stop_amount:
+#                     stop_loss = prices_df["Close"].iloc[i] - stop_amount
+
+#                 if prices_df["Close"].iloc[i] < stop_loss:
+#                     exit_price = (
+#                         max(prices_df["Open"].iloc[i], stop_loss) - slippage_amount
+#                     )
+#                     pnl = exit_price - self.entry_price
+#                     return pnl
+
+#             # Update stop-loss logic for short position
+#             elif sign == -1:
+#                 if prices_df["Close"].iloc[i] < stop_loss - stop_amount:
+#                     stop_loss = prices_df["Close"].iloc[i] + stop_amount
+
+#                 if prices_df["Close"].iloc[i] > stop_loss:
+#                     exit_price = (
+#                         min(prices_df["Open"].iloc[i], stop_loss) + slippage_amount
+#                     )
+#                     pnl = self.entry_price - exit_price
+#                     return pnl
+
+#         return None
+
+#     def execute_trade(
+#         self, trade_signal, current_price, i, risk_percent=0.5, tp_percent=0.09, sl=0.01
+#     ):
+#         if trade_signal != 0 and self.position == 0:  # Only enter if no open position
+#             self.position = trade_signal
+
+#             # Calculate entry price with realistic slippage
+#             # Simulate variable slippage by choosing a random value within a range
+#             slippage_range = (
+#                 1,
+#                 5,
+#             )  # Define a tuple representing the slippage range in points (multiply by 0.0001 for the value)
+#             random_slippage_points = random.randint(*slippage_range) / 10000
+
+#             if trade_signal == 1:
+#                 entry_price_adjustment = random_slippage_points
+#             else:
+#                 entry_price_adjustment = -random_slippage_points
+#             self.entry_price = current_price + entry_price_adjustment
+
+#             self.entry_points.append((i, self.entry_price))  # Record entry
+
+#             # Calculate take profit and stop loss levels based on 1:2 risk-reward ratio
+#             if trade_signal == 1:
+#                 tp_adjustment = tp_percent
+#                 # sl_adjustment = -risk_percent
+#                 sl_adjustment = -sl
+#             else:
+#                 tp_adjustment = -tp_percent
+#                 # sl_adjustment = risk_percent
+#                 sl_adjustment = sl
+
+#             tp_price = self.entry_price * (1 + tp_adjustment)
+#             sl_price = self.entry_price * (1 + sl_adjustment)
+
+#             self.take_profits.append((i, tp_price))
+#             self.stop_losses.append((i, sl_price))
+
+#             print(
+#                 f"New trade at index {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, TP: {tp_price}, SL: {sl_price},, Slippage: {(1 + sl_adjustment)}"
+#             )
+
+#     def manage_open_trade(self, latest_close, i):
+#         if self.position != 0:
+#             existing_trade_index = self.entry_points[-1][0]
+#             existing_entry_price = self.entry_points[-1][1]
+#             existing_tp_price = self.take_profits[-1][1]
+#             existing_sl_price = self.stop_losses[-1][1]
+
+#             # Apply slippage on exit price
+#             exit_slippage = self.slippage_points * 0.0001
+
+#         # Check if either the stop loss or take profit levels are hit
+#         if self.position == 1:  # For a long position
+#             if latest_close >= existing_tp_price:
+#                 exit_price = existing_tp_price - exit_slippage  # Apply slippage
+#                 pnl = (exit_price - existing_entry_price) * self.position_size
+#             elif latest_close <= existing_sl_price:
+#                 exit_price = existing_sl_price + exit_slippage  # Apply slippage
+#                 pnl = (exit_price - existing_entry_price) * self.position_size
+
+#             # If trade is closed, reset the position and update capital
+#             if latest_close >= existing_tp_price or latest_close <= existing_sl_price:
+#                 self.capital += pnl
+#                 self.trade_results.append(pnl)
+#                 if pnl > 0:
+#                     self.profitable_trades.append((existing_trade_index, exit_price))
+#                 else:
+#                     self.non_profitable_trades.append(
+#                         (existing_trade_index, exit_price)
+#                     )
+#                 self.position = 0
+#                 print(f"Long trade closed at index {i} with PnL: {pnl}")
+
+#         elif self.position == -1:  # For a short position
+#             if latest_close <= existing_tp_price:
+#                 exit_price = existing_tp_price + exit_slippage  # Apply slippage
+#                 pnl = (existing_entry_price - exit_price) * self.position_size
+#             elif latest_close >= existing_sl_price:
+#                 exit_price = existing_sl_price - exit_slippage  # Apply slippage
+#                 pnl = (existing_entry_price - exit_price) * self.position_size
+
+#             # If trade is closed, reset the position and update capital
+#             if latest_close <= existing_tp_price or latest_close >= existing_sl_price:
+#                 self.capital += pnl
+#                 self.trade_results.append(pnl)
+#                 if pnl > 0:
+#                     self.profitable_trades.append((existing_trade_index, exit_price))
+#                 else:
+#                     self.non_profitable_trades.append(
+#                         (existing_trade_index, exit_price)
+#                     )
+#                 self.position = 0
+#                 print(f"Short trade closed at index {i} with PnL: {pnl}")
+
+
+# """
+#     Create the strategy object
+# """
+# strategy = TradingStrategy(initial_capital=100, position_size=1, slippage_points=2)
+# """
+#     Main backtesting loop
+# """
+# for i in range(order, len(data) - 1):
+#     current_price = data["Close"].iloc[i]
+
+#     # Check for new trading signals only if there is no open position
+#     if strategy.position == 0:
+#         max_idx = argrelextrema(price.values[:i], np.greater, order=order)[0]
+#         min_idx = argrelextrema(price.values[:i], np.less, order=order)[0]
+
+#         idx = np.concatenate((max_idx, min_idx, [i - 1]))
+#         idx.sort()
+
+#         current_idx = idx[-5:]
+#         if len(current_idx) < 5:
+#             continue
+
+#         current_pattern = price.iloc[current_idx].reset_index(drop=True)
+#         XA = current_pattern[1] - current_pattern[0]
+#         AB = current_pattern[2] - current_pattern[1]
+#         BC = current_pattern[3] - current_pattern[2]
+#         CD = current_pattern[4] - current_pattern[3]
+#         LINES = [XA, AB, BC, CD]
+
+#         pattern_gartley = is_gartley_pattern(LINES, ERROR_ALLOWED)
+#         pattern_butterfly = is_butterfly_pattern(LINES, ERROR_ALLOWED)
+#         pattern_bat = is_bat_pattern(LINES, ERROR_ALLOWED)
+#         pattern_crab = is_crab_pattern(LINES, ERROR_ALLOWED)
+
+#         harmonics = np.array(
+#             [pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab]
+#         )
+
+#         if np.any(harmonics == 1):
+#             strategy.execute_trade(
+#                 1, current_price, i, risk_percent=0.5, tp_percent=0.02
+#             )
+#         elif np.any(harmonics == -1):
+#             strategy.execute_trade(
+#                 -1, current_price, i, risk_percent=0.5, tp_percent=0.02
+#             )
+
+#     # If there is an open position, manage the trade
+#     elif strategy.position != 0:
+#         latest_close = data["Close"].iloc[i]
+#         strategy.manage_open_trade(latest_close, i)
+
+
+# # Sum up the profits and losses from all trades
+# total_pnl = sum(strategy.trade_results)
+
+# # Calculate the unrealized profit/loss for any open position
+# unrealized_pnl = 0
+# if strategy.position != 0:
+#     latest_close = data["Close"].iloc[-1]  # Get the latest closing price
+#     if strategy.position == 1:  # Long position
+#         unrealized_pnl = (latest_close - strategy.entry_price) * strategy.position_size
+#     elif strategy.position == -1:  # Short position
+#         unrealized_pnl = (strategy.entry_price - latest_close) * strategy.position_size
+
+# # Final capital is initial capital plus total realized pnl and unrealized pnl
+# final_capital = strategy.capital + unrealized_pnl
+
+# print(f"Final Capital: {final_capital}")
+# print(f"Trade Results: {strategy.trade_results}")
+# print(f"Entry Points: {strategy.entry_points}")
+# print(f"Take Profits: {strategy.take_profits}")
+# print(f"Stop Losses: {strategy.stop_losses}")
+# print(f"Profitable Trades: {strategy.profitable_trades}")
+# print(f"Non-Profitable Trades: {strategy.non_profitable_trades}")
+# print(f"Total Trades: {len(strategy.entry_points)}")
+# print(f"Total number of profitable trades: {len(strategy.profitable_trades)}")
+# print(f"Total number of non-profitable trades: {len(strategy.non_profitable_trades)}")
+# print(f"Order: {order}")
+# print(
+#     f"Percentage of Profitable Trades: {(100 * len(strategy.profitable_trades))/len(strategy.entry_points)}%"
+# )
+
+
+
+
+# RSI parameters
+rsi_period = 14
+rsi_oversold = 30
+rsi_overbought = 70
+
 class TradingStrategy:
-    def __init__(self, initial_capital, position_size, slippage_points):
+    def __init__(self, initial_capital, slippage_points):
         self.capital = initial_capital
-        self.position_size = position_size
+        self.position_size = 0
         self.slippage_points = slippage_points
         self.position = 0  # 1 for long, -1 for short, 0 for no position
         self.entry_price = 0
@@ -59,89 +304,33 @@ class TradingStrategy:
         self.stop_losses = []
         self.profitable_trades = []
         self.non_profitable_trades = []
-        self.array = []
 
-    def walk_forward_on_data(
-        self, prices_df, sign, slippage_percent=0.02, stop_loss_percent=0.01
-    ):
-        self.entry_price = prices_df["Close"].iloc[0]
-
-        # Calculate slippage and stop-loss amount as percentages of the entry price
-        slippage_amount = self.entry_price * slippage_percent
-        stop_amount = self.entry_price * stop_loss_percent
-
-        # Initialize the stop-loss based on the position's sign
-        initial_stop_loss = (
-            self.entry_price - stop_amount
-            if sign == 1
-            else self.entry_price + stop_amount
-        )
-        stop_loss = initial_stop_loss
-
-        for i in range(1, len(prices_df)):
-            if sign == 1:
-                if prices_df["Close"].iloc[i] > stop_loss + stop_amount:
-                    stop_loss = prices_df["Close"].iloc[i] - stop_amount
-
-                if prices_df["Close"].iloc[i] < stop_loss:
-                    exit_price = (
-                        max(prices_df["Open"].iloc[i], stop_loss) - slippage_amount
-                    )
-                    pnl = exit_price - self.entry_price
-                    return pnl
-
-            # Update stop-loss logic for short position
-            elif sign == -1:
-                if prices_df["Close"].iloc[i] < stop_loss - stop_amount:
-                    stop_loss = prices_df["Close"].iloc[i] + stop_amount
-
-                if prices_df["Close"].iloc[i] > stop_loss:
-                    exit_price = (
-                        min(prices_df["Open"].iloc[i], stop_loss) + slippage_amount
-                    )
-                    pnl = self.entry_price - exit_price
-                    return pnl
-
-        return None
-
-    def execute_trade(
-        self, trade_signal, current_price, i, risk_percent=0.01, tp_percent=0.02
-    ):
+    def execute_trade(self, trade_signal, current_price, i, atr, risk_percent=0.01, reward_risk_ratio=2):
         if trade_signal != 0 and self.position == 0:  # Only enter if no open position
             self.position = trade_signal
+            self.position_size = (self.capital * risk_percent) / atr
 
-            # Calculate entry price with realistic slippage
-            # Simulate variable slippage by choosing a random value within a range
-            slippage_range = (
-                1,
-                5,
-            )  # Define a tuple representing the slippage range in points (multiply by 0.0001 for the value)
+            slippage_range = (1, 5)
             random_slippage_points = random.randint(*slippage_range) / 10000
-
-            if trade_signal == 1:
-                entry_price_adjustment = random_slippage_points
-            else:
-                entry_price_adjustment = -random_slippage_points
+            entry_price_adjustment = random_slippage_points if trade_signal == 1 else -random_slippage_points
             self.entry_price = current_price + entry_price_adjustment
 
-            self.entry_points.append((i, self.entry_price))  # Record entry
+            self.entry_points.append((i, self.entry_price))
 
-            # Calculate take profit and stop loss levels based on 1:2 risk-reward ratio
+            stop_loss_distance = atr
+            take_profit_distance = stop_loss_distance * reward_risk_ratio
+
             if trade_signal == 1:
-                tp_adjustment = tp_percent
+                tp_price = self.entry_price + take_profit_distance
+                sl_price = self.entry_price - stop_loss_distance
             else:
-                tp_adjustment = -tp_percent
-
-            sl_adjustment = -risk_percent if trade_signal == 1 else risk_percent
-            tp_price = self.entry_price * (1 + tp_adjustment)
-            sl_price = self.entry_price * (1 + sl_adjustment)
+                tp_price = self.entry_price - take_profit_distance
+                sl_price = self.entry_price + stop_loss_distance
 
             self.take_profits.append((i, tp_price))
             self.stop_losses.append((i, sl_price))
 
-            print(
-                f"New trade at index {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, TP: {tp_price}, SL: {sl_price},, Slippage: {(1 + sl_adjustment)}"
-            )
+            print(f"New trade at index {i}: {'Buy' if trade_signal == 1 else 'Sell'} at {self.entry_price}, TP: {tp_price}, SL: {sl_price}")
 
     def manage_open_trade(self, latest_close, i):
         if self.position != 0:
@@ -150,64 +339,65 @@ class TradingStrategy:
             existing_tp_price = self.take_profits[-1][1]
             existing_sl_price = self.stop_losses[-1][1]
 
-            # Apply slippage on exit price
             exit_slippage = self.slippage_points * 0.0001
 
-        # Check if either the stop loss or take profit levels are hit
-        if self.position == 1:  # For a long position
-            if latest_close >= existing_tp_price:
-                exit_price = existing_tp_price - exit_slippage  # Apply slippage
-                pnl = (exit_price - existing_entry_price) * self.position_size
-            elif latest_close <= existing_sl_price:
-                exit_price = existing_sl_price + exit_slippage  # Apply slippage
-                pnl = (exit_price - existing_entry_price) * self.position_size
-
-            # If trade is closed, reset the position and update capital
-            if latest_close >= existing_tp_price or latest_close <= existing_sl_price:
-                self.capital += pnl
-                self.trade_results.append(pnl)
-                if pnl > 0:
-                    self.profitable_trades.append((existing_trade_index, exit_price))
+            if self.position == 1:
+                if latest_close >= existing_tp_price:
+                    exit_price = existing_tp_price - exit_slippage
+                    pnl = (exit_price - existing_entry_price) * self.position_size
+                elif latest_close <= existing_sl_price:
+                    exit_price = existing_sl_price + exit_slippage
+                    pnl = (exit_price - existing_entry_price) * self.position_size
                 else:
-                    self.non_profitable_trades.append(
-                        (existing_trade_index, exit_price)
-                    )
-                self.position = 0
-                print(f"Long trade closed at index {i} with PnL: {pnl}")
+                    return
 
-        elif self.position == -1:  # For a short position
-            if latest_close <= existing_tp_price:
-                exit_price = existing_tp_price + exit_slippage  # Apply slippage
-                pnl = (existing_entry_price - exit_price) * self.position_size
-            elif latest_close >= existing_sl_price:
-                exit_price = existing_sl_price - exit_slippage  # Apply slippage
-                pnl = (existing_entry_price - exit_price) * self.position_size
-
-            # If trade is closed, reset the position and update capital
-            if latest_close <= existing_tp_price or latest_close >= existing_sl_price:
-                self.capital += pnl
-                self.trade_results.append(pnl)
-                if pnl > 0:
-                    self.profitable_trades.append((existing_trade_index, exit_price))
+            elif self.position == -1:
+                if latest_close <= existing_tp_price:
+                    exit_price = existing_tp_price + exit_slippage
+                    pnl = (existing_entry_price - exit_price) * self.position_size
+                elif latest_close >= existing_sl_price:
+                    exit_price = existing_sl_price - exit_slippage
+                    pnl = (existing_entry_price - exit_price) * self.position_size
                 else:
-                    self.non_profitable_trades.append(
-                        (existing_trade_index, exit_price)
-                    )
-                self.position = 0
-                print(f"Short trade closed at index {i} with PnL: {pnl}")
+                    return
 
+            self.capital += pnl
+            self.trade_results.append(pnl)
+            if pnl > 0:
+                self.profitable_trades.append((existing_trade_index, exit_price))
+            else:
+                self.non_profitable_trades.append((existing_trade_index, exit_price))
+            self.position = 0
+            print(f"Trade closed at index {i} with PnL: {pnl}")
 
-"""
-    Create the strategy object
-"""
-strategy = TradingStrategy(initial_capital=100, position_size=1, slippage_points=2)
-"""
-    Main backtesting loop
-"""
+strategy = TradingStrategy(initial_capital=100, slippage_points=2)
+
+def calculate_atr(prices_df, period=14):
+    high_low = prices_df['High'] - prices_df['Low']
+    high_close = np.abs(prices_df['High'] - prices_df['Close'].shift())
+    low_close = np.abs(prices_df['Low'] - prices_df['Close'].shift())
+    ranges = pd.concat([high_low, high_close, low_close], axis=1)
+    true_range = ranges.max(axis=1)
+    atr = true_range.rolling(period).mean()
+    return atr.iloc[-1]
+
+def calculate_rsi(prices_df, period=14):
+    delta = prices_df['Close'].diff()
+    gain = (delta.where(delta > 0, 0)).rolling(window=period).mean()
+    loss = (-delta.where(delta < 0, 0)).rolling(window=period).mean()
+    rs = gain / loss
+    rsi = 100 - (100 / (1 + rs))
+    return rsi
+
+# Calculate RSI
+data['RSI'] = calculate_rsi(data, rsi_period)
+
 for i in range(order, len(data) - 1):
     current_price = data["Close"].iloc[i]
+    atr = calculate_atr(data.iloc[:i + 1])
+    rsi = data['RSI'].iloc[i]
+    
 
-    # Check for new trading signals only if there is no open position
     if strategy.position == 0:
         max_idx = argrelextrema(price.values[:i], np.greater, order=order)[0]
         min_idx = argrelextrema(price.values[:i], np.less, order=order)[0]
@@ -230,39 +420,42 @@ for i in range(order, len(data) - 1):
         pattern_butterfly = is_butterfly_pattern(LINES, ERROR_ALLOWED)
         pattern_bat = is_bat_pattern(LINES, ERROR_ALLOWED)
         pattern_crab = is_crab_pattern(LINES, ERROR_ALLOWED)
+        pattern_cypher = is_cypher_pattern(LINES, ERROR_ALLOWED)
+        pattern_shark = is_shark_pattern(LINES, ERROR_ALLOWED)
 
-        harmonics = np.array(
-            [pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab]
-        )
+        harmonics = np.array([pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab, pattern_cypher, pattern_shark])
 
-        if np.any(harmonics == 1):
-            strategy.execute_trade(
-                1, current_price, i, risk_percent=0.01, tp_percent=0.02
-            )
-        elif np.any(harmonics == -1):
-            strategy.execute_trade(
-                -1, current_price, i, risk_percent=0.01, tp_percent=0.02
-            )
+        # RSI signals
+        if rsi < rsi_oversold:
+            rsi_signal = 1  # Buy signal
+        elif rsi > rsi_overbought:
+            rsi_signal = -1  # Sell signal
+        else:
+            rsi_signal = 0
 
-    # If there is an open position, manage the trade
+        # Combine harmonic pattern and RSI signals
+        combined_signal = 0
+        if np.any(harmonics == 1) and rsi_signal == 1:
+            combined_signal = 1
+        elif np.any(harmonics == -1) and rsi_signal == -1:
+            combined_signal = -1
+
+        if combined_signal != 0:
+            strategy.execute_trade(combined_signal, current_price, i, atr)
+
     elif strategy.position != 0:
         latest_close = data["Close"].iloc[i]
         strategy.manage_open_trade(latest_close, i)
 
-
-# Sum up the profits and losses from all trades
 total_pnl = sum(strategy.trade_results)
-
-# Calculate the unrealized profit/loss for any open position
 unrealized_pnl = 0
 if strategy.position != 0:
-    latest_close = data["Close"].iloc[-1]  # Get the latest closing price
-    if strategy.position == 1:  # Long position
+    latest_close = data["Close"].iloc[-1]
+    if strategy.position == 1:
         unrealized_pnl = (latest_close - strategy.entry_price) * strategy.position_size
-    elif strategy.position == -1:  # Short position
+    elif strategy.position == -1:
         unrealized_pnl = (strategy.entry_price - latest_close) * strategy.position_size
 
-# Final capital is initial capital plus total realized pnl and unrealized pnl
 final_capital = strategy.capital + unrealized_pnl
 
 print(f"Final Capital: {final_capital}")
@@ -276,9 +469,7 @@ print(f"Total Trades: {len(strategy.entry_points)}")
 print(f"Total number of profitable trades: {len(strategy.profitable_trades)}")
 print(f"Total number of non-profitable trades: {len(strategy.non_profitable_trades)}")
 print(f"Order: {order}")
-print(
-    f"Percentage of Profitable Trades: {(100 * len(strategy.profitable_trades))/len(strategy.entry_points)}%"
-)
+print(f"Percentage of Profitable Trades: {(100 * len(strategy.profitable_trades))/len(strategy.entry_points)}%")
 
 
 """

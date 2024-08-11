@@ -2,22 +2,28 @@ import pandas as pd
 import numpy as np
 from scipy.signal import argrelextrema
 from bayes_opt import BayesianOptimization
+import sys
+import os
+
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from harmonic_pattern import *
-from testSlippage import TradingStrategy  # This should be your TradingStrategy class
+from tradingStrategy import TradingStrategy  
 import os
 import contextlib
 
 # Load pre-processed data (ensure the CSV path is correct)
-data = pd.read_csv("CurrencyData/preprocessed_data.csv")
+data = pd.read_csv(
+    "/Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/preprocessed_data2.csv"
+)
 price = data["Close"]
-ERROR_ALLOWED = 10.0 / 100
+# ERROR_ALLOWED = 10.0 / 100
 
 
 def evaluate_strategy(
-    leverage, account_risk_pct, take_profit_percent, stop_loss_percent, order
+    leverage, account_risk_pct, take_profit_percent, stop_loss_percent, order, error_allowed
 ):
     strategy = TradingStrategy(
-        initial_capital=1000,
+        initial_capital=100,
         leverage=int(leverage),
         account_risk_pct=account_risk_pct / 100.00,
         take_profit_percent=take_profit_percent / 100.00,
@@ -52,10 +58,10 @@ def evaluate_strategy(
                 CD = current_pattern[4] - current_pattern[3]
                 LINES = [XA, AB, BC, CD]
 
-                pattern_gartley = is_gartley_pattern(LINES, ERROR_ALLOWED)
-                pattern_butterfly = is_butterfly_pattern(LINES, ERROR_ALLOWED)
-                pattern_bat = is_bat_pattern(LINES, ERROR_ALLOWED)
-                pattern_crab = is_crab_pattern(LINES, ERROR_ALLOWED)
+                pattern_gartley = is_gartley_pattern(LINES, error_allowed)
+                pattern_butterfly = is_butterfly_pattern(LINES, error_allowed)
+                pattern_bat = is_bat_pattern(LINES, error_allowed)
+                pattern_crab = is_crab_pattern(LINES, error_allowed)
 
                 harmonics = np.array(
                     [pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab]
@@ -85,7 +91,12 @@ def evaluate_strategy(
 
 # Wrapper function to use Bayesian optimization
 def strategy_wrapper(
-    leverage, account_risk_pct, take_profit_percent, stop_loss_percent, order
+    leverage,
+    account_risk_pct,
+    take_profit_percent,
+    stop_loss_percent,
+    order,
+    error_allowed,
 ):
     return evaluate_strategy(
         leverage=leverage,
@@ -93,16 +104,18 @@ def strategy_wrapper(
         take_profit_percent=take_profit_percent,
         stop_loss_percent=stop_loss_percent,
         order=order,
+        error_allowed=error_allowed,
     )
 
 
 # Define bounds for Bayesian Optimization
 bounds = {
-    "leverage": (10, 100),
-    "account_risk_pct": (5, 50),
+    "leverage": (5, 20),
+    "account_risk_pct": (5, 25),
     "take_profit_percent": (1, 10),
     "stop_loss_percent": (1, 10),
     "order": (1, 10),
+    "error_allowed": (0.1,0.8)
 }
 
 optimizer = BayesianOptimization(
