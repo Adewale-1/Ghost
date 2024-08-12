@@ -1,0 +1,92 @@
+Walk-Forward Analysis Results:
+Average Return: 93.83
+Standard Deviation of Returns: 16.28
+Sharpe Ratio (assuming risk-free rate of 0): 5.76
+
+Individual Period Returns:
+Period 1: 101.97
+Period 2: 100.00
+Period 3: 78.87
+Period 4: 75.00
+Period 5: 63.85
+Period 6: 100.00
+Period 7: 100.00
+Period 8: 111.08
+Period 9: 120.10
+Period 10: 75.00
+Period 11: 100.00
+Period 12: 100.00
+Period 13: 83.33
+Period 14: 100.00
+Period 15: 100.00
+Period 16: 79.20
+Period 17: 107.63
+Period 18: 95.43
+Period 19: 100.00
+Period 20: 92.14
+Period 21: 100.00
+Period 22: 78.87
+Period 23: 100.00
+Period 24: 100.00
+Period 25: 154.16
+Period 26: 100.00
+Period 27: 100.00
+Period 28: 102.29
+Period 29: 100.00
+Period 30: 81.27
+Period 31: 100.00
+Period 32: 100.00
+Period 33: 102.12
+Period 34: 88.45
+Period 35: 106.61
+Period 36: 102.41
+Period 37: 72.84
+Period 38: 102.12
+Period 39: 100.00
+Period 40: 88.80
+Period 41: 50.00
+Period 42: 95.00
+Period 43: 101.67
+Period 44: 105.10
+Period 45: 103.71
+Period 46: 100.00
+Period 47: 100.00
+Period 48: 95.00
+Period 49: 100.70
+Period 50: 100.00
+Period 51: 100.00
+Period 52: 50.00
+Period 53: 79.59
+Period 54: 100.00
+Period 55: 100.00
+Period 56: 81.11
+Period 57: 87.09
+Period 58: 91.56
+Period 59: 100.00
+Period 60: 50.00
+Period 61: 69.07
+Period 62: 106.60
+Period 63: 75.19
+Period 64: 100.00
+
+Average Best Parameters:
+account_risk_pct: 16.5569 (±7.1951)
+error_allowed: 0.3459 (±0.1612)
+leverage: 15.7344 (±4.6038)
+order: 5.2656 (±3.6239)
+rsi_overbought: 70.9485 (±7.4275)
+rsi_oversold: 30.1962 (±8.2756)
+rsi_period: 14.6425 (±5.2902)
+stop_loss_percent: 6.6049 (±3.1991)
+take_profit_percent: 4.7503 (±3.3052)
+
+Parameters of Best Performing Period:
+account_risk_pct: 25.0
+error_allowed: 0.5
+leverage: 20
+order: 10
+rsi_overbought: 60.0
+rsi_oversold: 29.636778836046926
+rsi_period: 21.0
+stop_loss_percent: 10.0
+take_profit_percent: 10.0

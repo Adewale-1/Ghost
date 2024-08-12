@@ -1,3 +1,3 @@
-Maximum capital return: 353.02687635604525
+Maximum capital return: 145.66088070461856
 Best parameters for max capital return:
- {'account_risk_pct': 7.715924516423293, 'error_allowed': 0.5233346642312133, 'leverage': 15, 'order': 9, 'stop_loss_percent': 3.4998383230331784, 'take_profit_percent': 7.202966356992827}
+ {'account_risk_pct': 13.604071662425866, 'error_allowed': 0.1, 'leverage': 13, 'order': 1, 'rsi_overbought': 76.03540717773423, 'rsi_oversold': 24.453305204237623, 'rsi_period': 18.82806415418593, 'stop_loss_percent': 7.000378751620045, 'take_profit_percent': 4.922997342095101}

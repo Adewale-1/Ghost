@@ -19,8 +19,67 @@ price = data["Close"]
 # ERROR_ALLOWED = 10.0 / 100
 
 
+def walk_forward_analysis(
+    data, window_size, step_size, optimization_func, evaluation_func
+):
+    results = []
+    all_best_params = []
+    for i in range(0, len(data) - window_size - step_size, step_size):
+        train_data = data.iloc[i : i + window_size].copy()
+        test_data = data.iloc[i + window_size : i + window_size + step_size].copy()
+
+        # Optimize on train data
+        optimizer = BayesianOptimization(
+            f=optimization_func(train_data),
+            pbounds=bounds,
+            random_state=1,
+        )
+        optimizer.maximize(init_points=5, n_iter=25)
+
+        # Get best parameters
+        best_params = optimizer.max["params"]
+        best_params["leverage"] = int(best_params["leverage"])
+        best_params["order"] = int(best_params["order"])
+        all_best_params.append(best_params)
+
+        # Evaluate on test data
+        test_result = evaluation_func(test_data, **best_params)
+        results.append(test_result)
+
+    return results, all_best_params
+
+
+# def evaluate_strategy(data, leverage, account_risk_pct, take_profit_percent, stop_loss_percent, order, error_allowed):
+
+
+def calculate_rsi(data, period=14):
+    close_delta = data["Close"].diff()
+
+    # Make two series: one for lower closes and one for higher closes
+    up = close_delta.clip(lower=0)
+    down = -1 * close_delta.clip(upper=0)
+
+    # Use exponential moving average
+    ma_up = up.ewm(com=period - 1, adjust=True, min_periods=period).mean()
+    ma_down = down.ewm(com=period - 1, adjust=True, min_periods=period).mean()
+
+    rsi = ma_up / ma_down
+    rsi = 100 - (100 / (1 + rsi))
+
+    return rsi
+
+
 def evaluate_strategy(
-    leverage, account_risk_pct, take_profit_percent, stop_loss_percent, order, error_allowed
+    data,
+    leverage,
+    account_risk_pct,
+    take_profit_percent,
+    stop_loss_percent,
+    order,
+    error_allowed,
+    rsi_period,
+    rsi_oversold,
+    rsi_overbought,
 ):
     strategy = TradingStrategy(
         initial_capital=100,
@@ -34,10 +93,15 @@ def evaluate_strategy(
     # Convert order to an integer and ensure it's 1 or more
     order = max(1, int(order))
 
+    # Calculate RSI for the current data
+    data.loc[:, "RSI"] = calculate_rsi(data, period=int(rsi_period))
+
+    price = data["Close"]
     # Redirect print output to null to suppress output
     with open(os.devnull, "w") as f, contextlib.redirect_stdout(f):
         for i in range(order, len(data) - 1):
             current_price = data["Close"].iloc[i]
+            rsi = data["RSI"].iloc[i]
 
             # Check for new trading signals only if there is no open position
             if strategy.position == 0:
@@ -67,18 +131,10 @@ def evaluate_strategy(
                     [pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab]
                 )
 
-                if np.any(harmonics == 1):
-                    strategy.execute_trade(
-                        1,
-                        current_price,
-                        i,
-                    )
-                elif np.any(harmonics == -1):
-                    strategy.execute_trade(
-                        -1,
-                        current_price,
-                        i,
-                    )
+                if np.any(harmonics == 1) and (rsi < rsi_oversold):
+                    strategy.execute_trade(1, current_price, i)
+                elif np.any(harmonics == -1) and (rsi > rsi_overbought):
+                    strategy.execute_trade(-1, current_price, i)
 
             # If there is an open position, manage the trade
             elif strategy.position != 0:
@@ -90,22 +146,32 @@ def evaluate_strategy(
 
 
 # Wrapper function to use Bayesian optimization
-def strategy_wrapper(
-    leverage,
-    account_risk_pct,
-    take_profit_percent,
-    stop_loss_percent,
-    order,
-    error_allowed,
-):
-    return evaluate_strategy(
-        leverage=leverage,
-        account_risk_pct=account_risk_pct,
-        take_profit_percent=take_profit_percent,
-        stop_loss_percent=stop_loss_percent,
-        order=order,
-        error_allowed=error_allowed,
-    )
+def strategy_wrapper(data):
+    def wrapper(
+        leverage,
+        account_risk_pct,
+        take_profit_percent,
+        stop_loss_percent,
+        order,
+        error_allowed,
+        rsi_period,
+        rsi_oversold,
+        rsi_overbought,
+    ):
+        return evaluate_strategy(
+            data=data,
+            leverage=leverage,
+            account_risk_pct=account_risk_pct,
+            take_profit_percent=take_profit_percent,
+            stop_loss_percent=stop_loss_percent,
+            order=order,
+            error_allowed=error_allowed,
+            rsi_period=rsi_period,
+            rsi_oversold=rsi_oversold,
+            rsi_overbought=rsi_overbought,
+        )
+
+    return wrapper
 
 
 # Define bounds for Bayesian Optimization
@@ -115,15 +181,17 @@ bounds = {
     "take_profit_percent": (1, 10),
     "stop_loss_percent": (1, 10),
     "order": (1, 10),
-    "error_allowed": (0.1,0.8)
+    "error_allowed": (0.1, 0.5),
+    "rsi_period": (7, 21),
+    "rsi_oversold": (20, 40),
+    "rsi_overbought": (60, 80)
 }
 
 optimizer = BayesianOptimization(
-    f=strategy_wrapper,
+    f=strategy_wrapper(data),  # Pass data here
     pbounds=bounds,
     random_state=1,
 )
-
 optimizer.maximize(
     init_points=5,
     n_iter=25,
@@ -143,3 +211,5 @@ with open("OptimizationResult_Baysian.txt", "w") as file:
         f"Maximum capital return: {optimizer.max['target']}\n"
         f"Best parameters for max capital return:\n {best_params}"
     )
+
+__all__ = ["walk_forward_analysis", "evaluate_strategy", "strategy_wrapper"]
