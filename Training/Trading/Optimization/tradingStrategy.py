@@ -100,7 +100,9 @@ class TradingStrategy:
             self.position = trade_signal
             slippage_adjustment = self.slippage_points * 0.0001
             self.entry_price = current_price * (
-                1 + slippage_adjustment if trade_signal == 1 else 1 - slippage_adjustment
+                1 + slippage_adjustment
+                if trade_signal == 1
+                else 1 - slippage_adjustment
             )
             self.entry_points.append((i, self.entry_price))
 

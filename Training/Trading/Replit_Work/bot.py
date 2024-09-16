@@ -11,8 +11,8 @@ FEE = 0.001  # 0.1%
 
 # Binance API keys Test Net
 ENABLE_TESTNET = True  # False for Main Net
-API_KEY = "OgCPB8vuV379wWTDPW4yF8RylUU6mpV8fAqLWFbFhGzpgV11MfBmCeCvkpKLDeCC"
-API_SECRET = "T4F3EDSCcxC19ZpPXKJyiPuiBJ4f0uGNiLp9Bb1x9wvta8buaeC2AErMHzstL5gz"
+API_KEY = "Enter your api key"
+API_SECRET = "Enter your api key"
 
 # Telegram settings
 # ENABLE_TELEGRAM = False

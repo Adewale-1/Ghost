@@ -7,15 +7,16 @@ import os
 
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from harmonic_pattern import *
-from tradingStrategy import TradingStrategy  
+from tradingStrategy import TradingStrategy
 import os
 import contextlib
+from data_enrichment import calculate_enhanced_signals
 
 # Load pre-processed data (ensure the CSV path is correct)
 data = pd.read_csv(
     "/Users/adewaleadenle/Software Development/GitHub Projects/Ghost/Training/Trading/CurrencyData/preprocessed_data2.csv"
 )
-price = data["Close"]
+# price = data["Close"]
 # ERROR_ALLOWED = 10.0 / 100
 
 
@@ -92,7 +93,7 @@ def evaluate_strategy(
 
     # Convert order to an integer and ensure it's 1 or more
     order = max(1, int(order))
-
+    data = calculate_enhanced_signals(data)
     # Calculate RSI for the current data
     data.loc[:, "RSI"] = calculate_rsi(data, period=int(rsi_period))
 
@@ -102,6 +103,7 @@ def evaluate_strategy(
         for i in range(order, len(data) - 1):
             current_price = data["Close"].iloc[i]
             rsi = data["RSI"].iloc[i]
+            tot_signal = data["TotSignal"].iloc[i]
 
             # Check for new trading signals only if there is no open position
             if strategy.position == 0:
@@ -131,9 +133,14 @@ def evaluate_strategy(
                     [pattern_gartley, pattern_butterfly, pattern_bat, pattern_crab]
                 )
 
-                if np.any(harmonics == 1) and (rsi < rsi_oversold):
+                # Incorporate new signals into trading decision
+                if np.any(harmonics == 1) and (rsi < rsi_oversold) and tot_signal == 1:
                     strategy.execute_trade(1, current_price, i)
-                elif np.any(harmonics == -1) and (rsi > rsi_overbought):
+                elif (
+                    np.any(harmonics == -1)
+                    and (rsi > rsi_overbought)
+                    and tot_signal == -1
+                ):
                     strategy.execute_trade(-1, current_price, i)
 
             # If there is an open position, manage the trade
@@ -184,7 +191,7 @@ bounds = {
     "error_allowed": (0.1, 0.5),
     "rsi_period": (7, 21),
     "rsi_oversold": (20, 40),
-    "rsi_overbought": (60, 80)
+    "rsi_overbought": (60, 80),
 }
 
 optimizer = BayesianOptimization(

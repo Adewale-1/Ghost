@@ -67,7 +67,7 @@ for param, value in best_period_params.items():
     print(f"{param}: {value}")
 
 # Saving results
-with open("WalkForwardAnalysis_ResultsV2.txt", "w") as file:
+with open("WalkForwardAnalysis_ResultsV5.txt", "w") as file:
     file.write(f"Walk-Forward Analysis Results:\n")
     file.write(f"Average Return: {average_return:.2f}\n")
     file.write(f"Standard Deviation of Returns: {std_return:.2f}\n")

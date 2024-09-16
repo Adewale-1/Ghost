@@ -1,0 +1,94 @@
+Walk-Forward Analysis Results:
+Average Return: 95.87
+Standard Deviation of Returns: 16.25
+Sharpe Ratio (assuming risk-free rate of 0): 5.90
+
+Individual Period Returns:
+Period 1: 165.39
+Period 2: 100.00
+Period 3: 101.35
+Period 4: 100.00
+Period 5: 95.48
+Period 6: 82.88
+Period 7: 75.10
+Period 8: 99.03
+Period 9: 114.92
+Period 10: 96.62
+Period 11: 100.00
+Period 12: 93.25
+Period 13: 100.00
+Period 14: 126.13
+Period 15: 100.00
+Period 16: 100.00
+Period 17: 105.49
+Period 18: 100.00
+Period 19: 100.00
+Period 20: 104.32
+Period 21: 103.85
+Period 22: 86.62
+Period 23: 100.00
+Period 24: 90.77
+Period 25: 143.33
+Period 26: 100.00
+Period 27: 100.00
+Period 28: 100.00
+Period 29: 100.00
+Period 30: 100.00
+Period 31: 100.00
+Period 32: 50.00
+Period 33: 104.28
+Period 34: 96.68
+Period 35: 61.79
+Period 36: 100.00
+Period 37: 92.00
+Period 38: 84.11
+Period 39: 89.82
+Period 40: 126.51
+Period 41: 89.56
+Period 42: 100.00
+Period 43: 85.51
+Period 44: 96.78
+Period 45: 83.69
+Period 46: 97.15
+Period 47: 75.00
+Period 48: 100.00
+Period 49: 84.86
+Period 50: 100.00
+Period 51: 105.13
+Period 52: 78.36
+Period 53: 75.00
+Period 54: 81.71
+Period 55: 96.75
+Period 56: 80.75
+Period 57: 94.81
+Period 58: 100.00
+Period 59: 79.21
+Period 60: 87.96
+Period 61: 85.04
+Period 62: 94.88
+Period 63: 88.34
+Period 64: 85.48
+
+Average Best Parameters:
+account_risk_pct: 18.2422 (±5.6695)
+error_allowed: 0.6014 (±0.2060)
+leverage: 12.3281 (±4.9151)
+order: 5.6250 (±2.8257)
+rsi_overbought: 69.2154 (±6.5615)
+rsi_oversold: 29.9315 (±5.9852)
+rsi_period: 12.4053 (±4.6863)
+stop_loss_percent: 5.0423 (±2.8297)
+take_profit_percent: 4.2439 (±2.7172)
+volume_threshold: 1.7387 (±0.5374)
+
+Parameters of Best Performing Period:
+account_risk_pct: 24.89811582881479
+error_allowed: 0.6389710307866961
+leverage: 14
+order: 2
+rsi_overbought: 74.5733352705
+rsi_oversold: 23.51400943412905
+rsi_period: 8.434317068984404
+stop_loss_percent: 7.058668882714128
+take_profit_percent: 6.8719756997418315
+volume_threshold: 1.5887994827322287

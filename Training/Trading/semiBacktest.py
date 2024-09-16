@@ -324,10 +324,10 @@ order = 1  # As per Bayesian optimization result
 
 strategy = TradingStrategy(
     initial_capital=100,
-    leverage=15,
-    account_risk_pct=0.1333,  # 13.33% as per optimization, but consider reducing this
-    take_profit_percent=0.0264,  # 2.64% as per optimization
-    stop_loss_percent=0.0217,  # 2.17% as per optimization
+    leverage=10,
+    account_risk_pct=0.2133,  # 13.33% as per optimization, but consider reducing this
+    take_profit_percent=0.01,  # 2.64% as per optimization
+    stop_loss_percent=0.05,  # 2.17% as per optimization
     slippage_points=2,
 )
 
